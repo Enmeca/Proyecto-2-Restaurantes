@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+.Contenedor{
+    
+       margin-left: 200px;
+       overflow:hidden;
+}
+.Categorias
+{
+      margin-left: 10px;
+    height: auto;
+    width: 200px;
+    float:left;
+}
+.Menu
+{
+    margin-left: 5px;
+    height: auto;
+    width: 460px;
+    float:left;
+}
+.Orden
+{
+    padding: 15px;
+    margin-left: 5px;
+    height: auto;
+    width: auto;
+    float:left;
+}
+
+.Contenedor_plato{
+    
+     
+       overflow:hidden;
+}
+.type_Orden
+{
+    
+     padding-top: 20px;
+    height: auto;
+    width: auto;
+    float:left;
+}
+.plato
+{
+    margin-left: 10px;  
+    height: auto;
+    width: 300px;
+    float:left;
+}
+.precio_añadir
+{
+  margin-left: 10px;   
+    height: auto;
+    width: 60px;
+    float:left;
+}
+.blocker {
+position: absolute;
+top: 0px;
+left: 0px;
+height:100%;
+width:100%;        /* hacemos que ocupe toda la pantalla a cualquier resolución*/
+z-index: 50;        /* lo colocamos por encima del resto de componentes*/
+}
+
+
+#c188:checked ~ .btn::after{
+     content: '\2B9D';
+   
+}
+input[type="checkbox"] {
+    
+    display: none;
+}
+
+.acordeon input[type="checkbox"],.type_Orden input[type="checkbox"] {
+    
+    display: none;
+}
+
+.acordeon__titulo{
+    display: block;
+    padding: 15px;
+    width: 440px;
+    color: black;
+    font-size: 20px;
+    cursor:pointer;
+    border-bottom: 1px solid #fff;
+   
+    
+}
+.switch_order{
+   
+    padding: 5px;
+    width: auto;
+    color: black;
+    font-size: 25px;
+    cursor:pointer;
+    
+   
+    
+}
+
+.acordeon__titulo::after{
+    content: '\2B9F';
+    
+    float:right;
+}
+
+    
+ 
+.acordeon__contenido{
+    height: 0;
+    overflow: hidden;
+    margin: 0;
+    transition: all 0.5s;
+    
+}
+.acordeon input:checked ~ .acordeon__contenido{
+    height: auto;
+    margin: 15px 0;
+   
+}
+.acordeon input:checked  ~ .acordeon__titulo::after{
+content: '\2B9D';
+   
+}
+
+.type_Orden input:checked ~ .switch_order,input:checked ~ .switch_order {
+    
+    background: silver;
+}
+.ventana{
+    background: orange;
+    width: 30%;
+    color: rgba(255,255,255,1);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    padding: 33px;
+    min-height: 250px;
+    border-radius: 23px;
+    position: absolute;
+    left:34%;
+        top: 35%;
+        display:none;
+}
+#cerrar{
+    position: absolute;
+    right:3px;
+    top: 1px;
+    
+}

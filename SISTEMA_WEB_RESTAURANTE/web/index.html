@@ -1,16 +1,129 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<head>
+    <title>Formulario</title>
+     <link href="/SISTEMA_WEB_RESTAURANTE/css/Style.css" rel="stylesheet" type="text/css" />
+     
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css" />
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+</head>
+<body id="cuerpo">
+    <div class="ventana" id="vent">
+        
+        <div id="cerrar"><img src="Imagen/close.png"></div>
+    </div>
+    
+ 
+    <div id="contenedor" class="Contenedor"> 
+       <div class="Categorias"> 
+    <h2>Categorias</h2>
+    <p>aaaa</p>
+     <p>aaaa</p>
+      <p>aaaa</p>
+       <p>aaaa</p>
+        <p>aaaa</p>
+       </div>
+         <div class="Menu">
+             <input type="text" name="txtfecha" id="txtfecha">
+                <input type="checkbox" name="acordeon" id="asp">
+                <label class="switch_order" for="asp">asp</label>
+             
+    <div class="acordeon">
+          <div class="acordeon__item">
+                <input type="checkbox" name="acordeon" id="c1">
+                <label class="acordeon__titulo" for="c1">ddddddddd</label>
+                <div class="acordeon__contenido">
+                     <div class="Contenedor_plato">
+                    
+                          <div class="plato">
+                               <h3>SCOTCH EGG</h3>
+                               <p>Boiled egg wrapped in a ground meat mixture, coated in breadcrumbs, and deep-fried.</p>
+                          </div>
+                          <div class="precio_añadir">
+                   
+                          <h3>$20000</h3>
+                     
+                          </div>
+                          <div class="precio_añadir">
+                                <br>
+                               <input type="button" value="+">
+                     
+                          </div>
+                    </div>
+                     <div class="Contenedor_plato">
+                    
+                          <div class="plato">
+                               <h3>SCOTCH EGG</h3>
+                               <p>Boiled egg wrapped in a ground meat mixture, coated in breadcrumbs, and deep-fried.</p>
+                          </div>
+                          <div class="precio_añadir">
+                   
+                          <h3>$20000</h3>
+                     
+                          </div>
+                          <div class="precio_añadir">
+                                <br>
+                               <input id="suma" type="button" value="+">
+                     
+                          </div>
+                    </div>                    
+                </div>
+          </div>
+          <div class="acordeon__item">
+                <input type="checkbox" name="acordeon" id="c2">
+                 <label class="acordeon__titulo" for="c2">ddddd</label>
+                 
+                 <p class="acordeon__contenido">assssssssssssss</p>
+                 
+          </div>
+    
+    </div>
+      </div>
+        <div class="Orden">
+            <div class="Contenedor_plato">
+                <div  class="type_Orden">   
+                <input type="checkbox" name="acordeon" id="c3">
+                <label class="switch_order" for="c3">Delivery</label>
+               </div>  
+                <div  class="type_Orden">   
+                <input type="checkbox" name="acordeon" id="c4">
+                <label class="switch_order" for="c4">Pick-up</label>
+               </div> 
+                
+             </div> 
+            <p>ssssss</p>
+        </div>    
+    </div>
+          
+    <script>
+        
+    function load(){
+        
+       document.getElementById("suma").addEventListener("click",abrir);
+        document.getElementById("cerrar").addEventListener("click",cerrar);
+    }    
+        
+    function abrir(){
+        document.getElementById("vent").style.display="block";
+         document.getElementById("c1").disabled="true";
+         
+        
+    }
+     function cerrar(){
+        document.getElementById("vent").style.display="none";
+        document.getElementById("c1").removeAttribute("disabled");
+    }
+   load();
+    
+     </script>
+       <script>
+$( "#txtfecha" ).datetimepicker({ minDate: 0,timeFormat: 'H:mm',minTime:'11:00',maxTime:'21:00',showOn:"button"});
+
+</script> 
+ 
+ </body>
+ </html>
