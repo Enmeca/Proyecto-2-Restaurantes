@@ -10,22 +10,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
 </head>
 <body id="cuerpo">
     <div class="ventana" id="vent">
         
         <div id="cerrar"><img src="Imagen/close.png"></div>
+        <div class="Contenedor_plato"  id="Cuerpo_ventana"></div>
     </div>
     
  
     <div id="contenedor" class="Contenedor"> 
-       <div class="Categorias"> 
-    <h2>Categorias</h2>
-    <p>aaaa</p>
-     <p>aaaa</p>
-      <p>aaaa</p>
-       <p>aaaa</p>
-        <p>aaaa</p>
+       <div class="Categorias" id="Tablacategoria"> 
+
+   
        </div>
          <div class="Menu">
              <input type="text" name="txtfecha" id="txtfecha">
@@ -33,53 +33,10 @@
                 <label class="switch_order" for="asp">asp</label>
              
     <div class="acordeon">
-          <div class="acordeon__item">
-                <input type="checkbox" name="acordeon" id="c1">
-                <label class="acordeon__titulo" for="c1">ddddddddd</label>
-                <div class="acordeon__contenido">
-                     <div class="Contenedor_plato">
-                    
-                          <div class="plato">
-                               <h3>SCOTCH EGG</h3>
-                               <p>Boiled egg wrapped in a ground meat mixture, coated in breadcrumbs, and deep-fried.</p>
-                          </div>
-                          <div class="precio_añadir">
-                   
-                          <h3>$20000</h3>
-                     
-                          </div>
-                          <div class="precio_añadir">
-                                <br>
-                               <input type="button" value="+">
-                     
-                          </div>
-                    </div>
-                     <div class="Contenedor_plato">
-                    
-                          <div class="plato">
-                               <h3>SCOTCH EGG</h3>
-                               <p>Boiled egg wrapped in a ground meat mixture, coated in breadcrumbs, and deep-fried.</p>
-                          </div>
-                          <div class="precio_añadir">
-                   
-                          <h3>$20000</h3>
-                     
-                          </div>
-                          <div class="precio_añadir">
-                                <br>
-                               <input id="suma" type="button" value="+">
-                     
-                          </div>
-                    </div>                    
-                </div>
+          <div class="acordeon__item" id="Contenedor_acordeon">
+              
           </div>
-          <div class="acordeon__item">
-                <input type="checkbox" name="acordeon" id="c2">
-                 <label class="acordeon__titulo" for="c2">ddddd</label>
-                 
-                 <p class="acordeon__contenido">assssssssssssss</p>
-                 
-          </div>
+          
     
     </div>
       </div>
@@ -95,28 +52,348 @@
                </div> 
                 
              </div> 
-            <p>ssssss</p>
+            <div id="items" class="items"> </div>
+          
         </div>    
     </div>
           
     <script>
-        
+   var Adicionales = new Array();
+    var Opciones = new Array();
+   var listopciadi = new Array();
+   var plato;
     function load(){
         
-       document.getElementById("suma").addEventListener("click",abrir);
+      // document.getElementById("suma").addEventListener("click",abrir);
         document.getElementById("cerrar").addEventListener("click",cerrar);
+        buscarcategorias();
     }    
         
-    function abrir(){
+    function show_opciones(platillo){
+         plato=platillo;
+           $.ajax({type: "GET", url:"api/Opciones/"+platillo.codigo, contentType: "application/json"})
+            .then( (OpciAdi)=>{Show_ventana(OpciAdi);},
+                   (error)=>{ alert(errorMessage(error.status));});  
+        
+         
+        
+    }
+    function mi_carrito_sin_opciones()
+    {
+         var precio=0;
+      Opciones.length=0;
+      Adicionales.length=0;
+          precio = precio+parseInt(plato.precio);
+      
+        var Item_carrito={
+            plato: plato,
+            adicionales: Adicionales,
+            opciones: Opciones,
+            cantidad: 1,
+            total: precio    
+        };
+        
+    $.ajax({type: "POST", url:"api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+        function veri_adicionales()
+    {
+        var bandera=0;
+        var respuestas = new Array();
+        listopciadi.forEach((a)=>{
+          
+          if(a.opcion.requerido)
+          {
+          $("#Cuerpo_ventana").find("input:checked").each(function () {
+            var valor=$(this).val();
+            a.adicionales.forEach((ad)=>{
+                if(valor==ad.codigo.toString() && a.opcion.codigo==ad.opcion.codigo)
+                {
+                    bandera=1;
+                }
+            });
+            
+            
+         });
+          if(bandera==0)
+            {
+                respuestas.push(a);
+            }
+            
+          }
+         
+           bandera=0; 
+       
+            
+            
+        });
+        return respuestas;
+        
+    }
+    function veri_adicionales1()
+    {
+        var bandera=0;
+        var respuesta=0;
+        listopciadi.forEach((a)=>{
+          
+          if(a.opcion.requerido)
+          {
+          $("#Cuerpo_ventana").find("input:checked").each(function () {
+            var valor=$(this).val();
+            a.adicionales.forEach((ad)=>{
+                if(valor==ad.codigo.toString() && a.opcion.codigo==ad.opcion.codigo)
+                {
+                    bandera=1;
+                }
+            });
+            
+            
+         });
+          if(bandera==0)
+            {
+                respuesta=1;
+            }
+            
+          }
+         
+           bandera=0; 
+       
+            
+            
+        });
+        if(respuesta==0)
+        {return true;}
+        else
+        {
+            return false;
+        }
+        
+    }
+    function Show_ventana(OpciAdi)
+    {
+      
+     if(OpciAdi.length==0)
+     {
+       
+       mi_carrito_sin_opciones();  
+     }
+     else
+     {
+      
+     listopciadi=OpciAdi;   
+     var cuerpoventana=$("#Cuerpo_ventana");
+    cuerpoventana.html("");
+     OpciAdi.forEach( (o)=>{row_opciones(cuerpoventana,o);});
+     cuerpoventana.append("<input type='button' value='-' id='menos'>");
+     cuerpoventana.append("<input type='text' value='1' id='cantidad'>");
+      cuerpoventana.append("<input type='button' value='+' id='mas'>");
+    cuerpoventana.append("<input type='button' value='Enviar' id='Enviar'>");
+      cuerpoventana.find("#mas").on("click",()=>{Suma();});
+       cuerpoventana.find("#menos").on("click",()=>{Resta();});
+       cuerpoventana.find("#Enviar").on("click",()=>{Micarrito();});
+      cuerpoventana.find("#cantidad").attr('disabled','disabled');
         document.getElementById("vent").style.display="block";
          document.getElementById("c1").disabled="true";
+     
+    }
+    }
+    function Resta()
+    {
+        
+        var cuerpoventana=$("#Cuerpo_ventana");
+        if(cuerpoventana.find("#cantidad").val()!="1"){
+           cuerpoventana.find("#cantidad").val(parseInt(cuerpoventana.find("#cantidad").val(),10)-1);  
+            
+        }
+       
+    }
+    function Suma()
+    {
+        
+        var cuerpoventana=$("#Cuerpo_ventana");   
+        cuerpoventana.find("#cantidad").val(parseInt(cuerpoventana.find("#cantidad").val(),10)+1);
+    }
+    function row_opciones(cuerpoventana,o)
+    {
+        var d =$("<div />");
+        if(!o.opcion.requerido)
+        {d.html("<h3>"+o.opcion.nombre+"</h3>");}
+        else
+        {d.html("<h3>"+o.opcion.nombre+"    (requerido)</h3>");}
+        if(!o.opcion.requerido)
+        {o.adicionales.forEach( (a)=>{d.append("<div class='Block_window'><input type='checkbox' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");});}
+        else
+        {o.adicionales.forEach( (a)=>{d.append("<div class='Block_window'><input type='radio' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");});}
+   
+     //d.find("#suma").on("click",()=>{show_opciones(plato.codigo);});
+      cuerpoventana.append(d);    
+        
+        
+    }
+    function Micarrito()
+    {
+        var respuestas=veri_adicionales();
+        if(respuestas.length==0){
+            cerrar();
+       var precio=0;
+      Opciones.length=0;
+      Adicionales.length=0;
+      $("#Cuerpo_ventana").find("input:checked").each(function () {
+          
+        var i =$(this).val();
+       
+        listopciadi.forEach( (o)=>{
+           o.adicionales.forEach( (a)=> {
+               
+              if(a.codigo== i) 
+              {
+                      if(Opciones.find(element => element.codigo == o.opcion.codigo))  
+                        {
+                            precio=precio+parseInt(a.precio);
+                        Adicionales.push(a);
+                        }
+                       else
+                        {
+                          precio=precio+parseInt(a.precio);
+                          Opciones.push(o.opcion);
+                         Adicionales.push(a);
+            
+                        }
+              }
+               
+           });
+        });
+  
+        });
+        precio = precio+parseInt(plato.precio);
+        precio = precio*parseInt($("#cantidad").val());
+        var Item_carrito={
+            plato: plato,
+            adicionales: Adicionales,
+            opciones: Opciones,
+            cantidad:$("#cantidad").val(),
+            total: precio    
+        };
+        
+    $.ajax({type: "POST", url:"api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); }
          
+         else
+         {
+             
+             respuestas.forEach((r)=>{  
+             alertify.notify("Por favor elige de la opcion "+r.opcion.nombre,'error',5, null);
+             
+             });
+         }
+    }
+    
+    
+ 
+       function Show_items(items)
+       {
+  
+          
+          var div_items =  $("#items");
+          div_items.html("");
+          items.forEach( (i)=>{
+                var div_contenedor =  $("<div />");
+                div_contenedor.addClass("Contenedor_plato");
+                 var div_modulo =  $("<div />");
+                div_modulo.addClass("Orden");
+                div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
+               div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
+              i.opciones.forEach( (o)=>{    
+              div_modulo.append("<h3>"+o.nombre+"</h3>");
+                    i.adicionales.forEach((a)=>{     
+                        if(o.codigo==a.opcion.codigo)
+                        {
+                          div_modulo.append("<p>"+a.nombre+" $"+a.precio+"</p>");  
+                            
+                        }
+                
+                    });
+            
+            
+              });
+              div_contenedor.find("#menos_cantidad").on("click",()=>{Resta_cantidad(i);});
+             div_contenedor.append(div_modulo);  
+             div_items.append(div_contenedor); 
+              
+          });
+          
+           
+       }
+    
+    function Resta_cantidad(item_carrito){
+      var item_codigo=item_carrito.plato.codigo.toString();
+      item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
+       item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
+      $.ajax({type: "GET", url:"api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); 
         
     }
      function cerrar(){
         document.getElementById("vent").style.display="none";
         document.getElementById("c1").removeAttribute("disabled");
     }
+    function buscarcategorias(){
+    $.ajax({type: "GET", url:"api/Categorias",contentType: "application/json"})
+      .then( (categorias)=>{list(categorias);},
+             (error)=>{ alert(errorMessage(error.status));});                  
+    }
+    
+     function Buscarplatillos(codigo,descripcion){      
+        $.ajax({type: "GET", url:"api/Platillos/"+codigo, contentType: "application/json"})
+            .then( (Platillos)=>{list_platillos(Platillos,descripcion);},
+                   (error)=>{ alert(errorMessage(error.status));});                     
+  }
+
+    function list_platillos(Platillos,categoria){
+    var contenedorplatillos=$("#Contenedor_acordeon");
+    contenedorplatillos.html("");
+    contenedorplatillos.html("<input type='checkbox' name='acordeon' id='c1'>"+
+                "<label class='acordeon__titulo' for='c1'>"+categoria+"</label>"+
+                "<div class='acordeon__contenido' id='acordeon_platillos'></div>");
+    
+    var listadoplatillos=contenedorplatillos.find("#acordeon_platillos");
+    listadoplatillos.html("");
+     Platillos.forEach( (p)=>{row_platillos(listadoplatillos,p);});	
+  }
+    function row_platillos(listadoplatillos,plato){
+      var d =$("<div />");
+      d.addClass("Contenedor_plato");
+      d.html("<div class='plato'><h3>"+plato.nombre+"</h3><p>"+plato.descripcion+"</p></div>"+
+              "<div class='precio_añadir'><h3>$"+plato.precio.toString()+"</h3></div>"+
+               "<div class='precio_añadir'><br><input id='suma' type='button' value='+'></div>");
+     d.find("#suma").on("click",()=>{show_opciones(plato);});
+      listadoplatillos.append(d);           
+  }
+    function errorMessage(status){
+        switch(status){
+            case 404: return "Registro no encontrado";
+            case 403: case 405: return "Usuario no autorizado";
+            case 406: return "Registro duplicado";
+            default: return "Error: " + status;
+        }
+    }
+  function list(categorias){
+    var listadocategoria=$("#Tablacategoria");
+    listadocategoria.html("");
+    listadocategoria.html("<center><p>Categoria</p></center>");
+    categorias.forEach( (p)=>{row(listadocategoria,p);});	
+  }
+  
+  function row(listadocategoria,categoria){
+      var p =$("<p />");
+      p.html(categoria.descripcion);
+      p.on("click",()=>{Buscarplatillos(categoria.codigo.toString(),categoria.descripcion);});
+      listadocategoria.append(p);           
+  }
    load();
     
      </script>
