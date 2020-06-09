@@ -15,6 +15,27 @@
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
 </head>
 <body id="cuerpo">
+    <nav id="Menu"> 
+           <ul class="Nav">     
+           <li> <a href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Registro/Registro.html">Register</a>
+                  <ul> <!--submenu --> </ul>
+                </li> 
+                <li class="Barra"> | </li>  
+                <li >
+                  <a  href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html">Login</a>
+                  <ul>  <!--submenu --> </ul>
+                </li>
+                <li class="Barra"> | </li>    
+                <li >
+                  <a  href="/Banco_proyectoI/Presentacion/Cliente/Cuenta_amiga/Menu_cuenta_amiga.jsp">View Menu</a>
+                  <ul>  <!--submenu --> </ul>
+                </li>
+                
+                 </ul> 
+                    </nav> 
+    
+    
+    
     <div class="ventana" id="vent">
         
         <div id="cerrar"><img src="Imagen/close.png"></div>
@@ -28,9 +49,19 @@
    
        </div>
          <div class="Menu">
-             <input type="text" name="txtfecha" id="txtfecha">
-                <input type="checkbox" name="acordeon" id="asp">
-                <label class="switch_order" for="asp">asp</label>
+             <div class="acordeon">
+          <input type='checkbox' name='acordeon1' id='asp_fecha'>
+                <label id="Asp_Fecha" class='acordeon__titulo' for='asp_fecha'>categoria</label>
+                <div class='acordeon__contenido' id='acordeon_platillos'>
+                    <div class="Contenedor_plato">
+                       <input type="text" placeholder="Seleccionar fecha" name="txtfecha" id="txtfecha">
+                       <input id="set_date" type="button" value="Establecer fecha"><br><br>
+                <input type="checkbox" name="asp" id="asp">
+                <label class="switch_order" for="asp">ASP</label> 
+                    </div>
+                    
+                </div>
+               </div>
              
     <div class="acordeon">
           <div class="acordeon__item" id="Contenedor_acordeon">
@@ -43,17 +74,17 @@
         <div class="Orden">
             <div class="Contenedor_plato">
                 <div  class="type_Orden">   
-                <input type="checkbox" name="acordeon" id="c3">
+                <input type="radio" name="acordeon" id="c3">
                 <label class="switch_order" for="c3">Delivery</label>
                </div>  
                 <div  class="type_Orden">   
-                <input type="checkbox" name="acordeon" id="c4">
+                <input type="radio" name="acordeon" id="c4">
                 <label class="switch_order" for="c4">Pick-up</label>
                </div> 
                 
              </div> 
-            <div id="items" class="items"> </div>
-          
+            <div id="items" class="items"><br><br> </div>
+           <center> <input type="button" value="Comprar"></center>
         </div>    
     </div>
           
@@ -62,13 +93,41 @@
     var Opciones = new Array();
    var listopciadi = new Array();
    var plato;
+   var total;
     function load(){
         
       // document.getElementById("suma").addEventListener("click",abrir);
         document.getElementById("cerrar").addEventListener("click",cerrar);
         buscarcategorias();
-    }    
+        $("#Asp_Fecha").html("");
+        $("#Asp_Fecha").html("ASP");
+        $('#asp').prop('checked',true);
+        $('#c4').prop('checked',true);
+        $('#txtfecha').val("");
+        $('#set_date').on("click",()=>{veri_fecha();});
+        $('#asp').on("click",()=>{ceri_asp();});
+    }
+    function ceri_asp()
+    {
+       $("#Asp_Fecha").html('ASP');
+       $('#txtfecha').val(""); 
+       $("#asp_fecha").prop('checked',false);
+    }
+    function veri_fecha()
+    {
+        if($('#txtfecha').val()=="")
+                {
+                     alertify.notify("Seleccione una fecha",'error',5, null);
+                }
+                else
+                {
+                  $('#asp').prop('checked',false);
+                  $("#Asp_Fecha").html("");
+                  $("#Asp_Fecha").html($('#txtfecha').val());
+                  $("#asp_fecha").prop('checked',false);
+                }
         
+    }
     function show_opciones(platillo){
          plato=platillo;
            $.ajax({type: "GET", url:"api/Opciones/"+platillo.codigo, contentType: "application/json"})
@@ -296,7 +355,7 @@
        function Show_items(items)
        {
   
-          
+          total=0;
           var div_items =  $("#items");
           div_items.html("");
           items.forEach( (i)=>{
@@ -306,7 +365,8 @@
                 div_modulo.addClass("Orden");
                 div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
                div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
-              i.opciones.forEach( (o)=>{    
+              total = total + parseInt(i.total);
+            i.opciones.forEach( (o)=>{    
               div_modulo.append("<h3>"+o.nombre+"</h3>");
                     i.adicionales.forEach((a)=>{     
                         if(o.codigo==a.opcion.codigo)
@@ -324,7 +384,7 @@
              div_items.append(div_contenedor); 
               
           });
-          
+          div_items.append("<center><h3>Total: $"+total.toString()+"</h3></center>");
            
        }
     
@@ -398,7 +458,7 @@
     
      </script>
        <script>
-$( "#txtfecha" ).datetimepicker({ minDate: 0,timeFormat: 'H:mm',minTime:'11:00',maxTime:'21:00',showOn:"button"});
+$( "#txtfecha" ).datetimepicker({ minDate: 0,timeFormat: 'H:mm',minTime:'11:00',maxTime:'21:00'});
 
 </script> 
  
