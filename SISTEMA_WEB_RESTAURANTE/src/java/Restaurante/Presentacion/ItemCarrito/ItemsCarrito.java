@@ -58,4 +58,16 @@ public class ItemsCarrito {
             throw new NotFoundException(); 
         }
     }
+    
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Item_Carrito> get_items() {
+        try {
+           
+            return Model.instance().getItems();
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
 }

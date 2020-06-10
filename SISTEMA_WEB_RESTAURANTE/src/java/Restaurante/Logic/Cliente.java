@@ -10,16 +10,36 @@ package Restaurante.Logic;
  * @author Andres
  */
 public class Cliente {
-    Usuario usuario;
+    int codigo;
+    String correo;
     String nombre;
     String apellidos;
-    String telefono;
+    int telefono;
+    Usuario usuario;
 
-    public Cliente(Usuario usuario, String nombre, String apellidos, String telefono) {
-        this.usuario = usuario;
+    public Cliente(int codigo, String correo, String nombre, String apellidos, int telefono, Usuario usuario) {
+        this.codigo = codigo;
+        this.correo = correo;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
+        this.usuario = usuario;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public Cliente() {
@@ -49,11 +69,11 @@ public class Cliente {
         this.apellidos = apellidos;
     }
 
-    public String getTelefono() {
+    public int getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
+    public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
     

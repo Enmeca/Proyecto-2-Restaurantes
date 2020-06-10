@@ -21,6 +21,8 @@ public class Model {
      private Restaurante.data.PlatoDAO plato;
      private Restaurante.data.OpcionDAO opcion;
       private Restaurante.data.AdicionalDAO adicional;
+      private Restaurante.data.UsuarioDAO usuario;
+       private Restaurante.data.AddressBookDAO direccion;
       private HashMap<String,Item_Carrito> items;
      
         public static Model instance(){
@@ -36,6 +38,8 @@ public class Model {
         plato = new Restaurante.data.PlatoDAO();
         opcion= new Restaurante.data.OpcionDAO();
         adicional= new Restaurante.data.AdicionalDAO();
+        usuario= new Restaurante.data.UsuarioDAO();
+        direccion=new Restaurante.data.AddressBookDAO();
         items= new HashMap();
     }
 
@@ -88,7 +92,14 @@ public class Model {
     
     
     }
-    
+    public List<Address_book> Direccionesget(Cliente c)
+    {
+    return direccion.Direccionessearch(db, c);
+    }
+    public Cliente UserGet(Usuario u)
+    {
+     return usuario.Inicio_sesion(db, u);
+    }
     public void GuardarItem(Item_Carrito item)
     {
         String key = KeyItem(item);

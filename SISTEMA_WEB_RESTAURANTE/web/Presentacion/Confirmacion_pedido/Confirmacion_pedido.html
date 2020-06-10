@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Verificacion</title>
+         <link href="/SISTEMA_WEB_RESTAURANTE/css/Style.css" rel="stylesheet" type="text/css" />
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <nav id="Menu"> 
+            </nav>
+        <div class="Contenedor_plato">
+            <div class="Datos">
+                    <form class="formulaio_veri " id="form">
+            <div ><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png" width="100" height="100"></div><h3>Datos Personales</h3>  
+            <p>Nombre:</p>
+            <input class="input_form" type="text" placeholder="Nombre" id="Nombre"><br><br>
+            <p>Apellidos:</p>
+            <input class="input_form" type="text" placeholder="Apellidos" id="Apellidos"><br><br>
+            <p>Telefono:</p>
+            <input class="input_form" type="text" placeholder="Telefono" id="Telefono"><br><br>
+            <p>Correo electronico:</p>
+              <input class="input_form" type="text" placeholder="Correo" id="Correo">
+             
+        
+        </form>
+            </div>
+             <div class="Items">
+                 <div class="formulaio_veri">
+                 <center><h3>Mi carrito</h3><center>
+                 <div class="Contenedor_plato">
+                <div  class="type_Orden">   
+                <input type="radio" name="acordeon" id="c3">
+                <label class="switch_order" for="c3">Delivery</label>
+               </div>  
+                <div  class="type_Orden">   
+                <input type="radio" name="acordeon" id="c4">
+                <label class="switch_order" for="c4">Pick-up</label>
+               </div> 
+                
+             </div> 
+                 
+            <div id="items" class="items"><br><br> </div>
+          <input class="Margen_left" type="button" id="Compra" value="Confirmar">
+            </div>
+                 </div>
+        </div>
+        <script>
+            function Load()
+            {Itemsget();
+             Islogueado();
+            }
+       function Itemsget()
+    {
+          $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    function Resta_cantidad(item_carrito){
+      var item_codigo=item_carrito.plato.codigo.toString();
+      item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
+       item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
+      $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    function show_nav(sesion)
+    {
+        if(sesion)
+        {
+           var menu=$("#Menu");
+           menu.html("");
+            menu.html( "<ul class='Nav'>"+        
+                "<li >"+
+                 " <a  href='#'>"+sesion.nombre+"</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+                 "<li >"+
+                 " <a  href='/SISTEMA_WEB_RESTAURANTE/index.html'>View Menu</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+                 "</ul> " ); 
+         
+         $("#Nombre").val(sesion.nombre);
+         $("#Apellidos").val(sesion.apellidos);
+         $("#Telefono").val(sesion.telefono);
+         $("#Correo").val(sesion.correo);
+         Direccionesget(sesion);
+        }
+        else
+        {
+            $("#form").append("<p>Direccion:</p>");
+            $("#form").append("<input class='input_form' type='text' placeholder='Direccion' id='Direccion'>");
+           var menu=$("#Menu");
+           menu.html("");
+            menu.html( "<ul class='Nav'>"+     
+           "<li> <a href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Registro/Registro.html'>Register</a>"
+                +"  <ul> <!--submenu --> </ul>"+"</li> "
+                +"<li class='Barra'> | </li>"+  
+                "<li >"+
+                  "<a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html'>Login</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+               " <li class='Barra'> | </li>" +   
+                "<li >"+
+                 " <a  href='/SISTEMA_WEB_RESTAURANTE/index.html'>View Menu</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+                
+                 "</ul> " );
+         
+        
+        }
+        
+    }
+    function Select_direccion(direcciones)
+    { 
+        var select = $("<select />")
+        select.addClass("input_form");
+        $("#form").append("<p>Direcciones:</p>");
+      direcciones.forEach((d)=>{ select.append("<option value='"+d.codigo+"'>"+d.direccion+"</option>");});
+          $("#form").append(select);      
+       
+        
+    }
+    function Direccionesget(client){
+         $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Direcciones",data: JSON.stringify(client), contentType: "application/json"})
+            .then( (direcciones)=>{Select_direccion(direcciones);},
+                   (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+     function Islogueado()
+    {
+        $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Logueo", contentType: "application/json"})
+            .then( (sesion)=>{show_nav(sesion);},
+                   (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+               function Show_items(items)
+       {
+  
+          total=0;
+          var div_items =  $("#items");
+          div_items.html("");
+          items.forEach( (i)=>{
+                var div_contenedor =  $("<div />");
+                div_contenedor.addClass("Contenedor_plato");
+                 var div_modulo =  $("<div />");
+                div_modulo.addClass("Orden");
+                div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
+               div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
+              total = total + parseInt(i.total);
+            i.opciones.forEach( (o)=>{    
+              div_modulo.append("<h3>"+o.nombre+"</h3>");
+                    i.adicionales.forEach((a)=>{     
+                        if(o.codigo==a.opcion.codigo)
+                        {
+                          div_modulo.append("<p>"+a.nombre+" $"+a.precio+"</p>");  
+                            
+                        }
+                
+                    });
+            
+            
+              });
+              div_contenedor.find("#menos_cantidad").on("click",()=>{Resta_cantidad(i);});
+             div_contenedor.append(div_modulo);  
+             div_items.append(div_contenedor); 
+              
+          });
+          div_items.append("<h3 class='Margen_left'>Total: $"+total.toString()+"</h3>");
+           
+       }
+       Load();
+       </script>
+    </body>
+</html>

@@ -11,10 +11,10 @@ package Restaurante.Logic;
  */
 public class Address_book {
     int codigo;
-    Usuario usuario;
+    Cliente usuario;
     String direccion;
 
-    public Address_book(int codigo, Usuario usuario, String direccion) {
+    public Address_book(int codigo, Cliente usuario, String direccion) {
         this.codigo = codigo;
         this.usuario = usuario;
         this.direccion = direccion;
@@ -31,11 +31,11 @@ public class Address_book {
         this.codigo = codigo;
     }
 
-    public Usuario getUsuario() {
+    public Cliente getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Cliente usuario) {
         this.usuario = usuario;
     }
 

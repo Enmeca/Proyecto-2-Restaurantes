@@ -16,23 +16,8 @@
 </head>
 <body id="cuerpo">
     <nav id="Menu"> 
-           <ul class="Nav">     
-           <li> <a href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Registro/Registro.html">Register</a>
-                  <ul> <!--submenu --> </ul>
-                </li> 
-                <li class="Barra"> | </li>  
-                <li >
-                  <a  href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html">Login</a>
-                  <ul>  <!--submenu --> </ul>
-                </li>
-                <li class="Barra"> | </li>    
-                <li >
-                  <a  href="/Banco_proyectoI/Presentacion/Cliente/Cuenta_amiga/Menu_cuenta_amiga.jsp">View Menu</a>
-                  <ul>  <!--submenu --> </ul>
-                </li>
-                
-                 </ul> 
-                    </nav> 
+     
+    </nav> 
     
     
     
@@ -84,7 +69,7 @@
                 
              </div> 
             <div id="items" class="items"><br><br> </div>
-           <center> <input type="button" value="Comprar"></center>
+           <center> <input type="button" id="Compra" value="Comprar"></center>
         </div>    
     </div>
           
@@ -105,9 +90,68 @@
         $('#c4').prop('checked',true);
         $('#txtfecha').val("");
         $('#set_date').on("click",()=>{veri_fecha();});
-        $('#asp').on("click",()=>{ceri_asp();});
+        $('#asp').on("click",()=>{veri_asp();});
+        Islogueado();
+        Itemsget();
+         $('#Compra').on("click",()=>{ConfirmacionPedido();});
     }
-    function ceri_asp()
+    function ConfirmacionPedido(){
+        
+        if(total==0)
+        {
+             alertify.notify("Seleccione algun plato",'error',5, null);
+        }
+        else
+        {
+            
+            window.open("/SISTEMA_WEB_RESTAURANTE/Presentacion/Confirmacion_pedido/Confirmacion_pedido.html");
+        }
+    }
+    function Islogueado()
+    {
+        $.ajax({type: "GET", url:"api/Logueo", contentType: "application/json"})
+            .then( (sesion)=>{show_nav(sesion);},
+                   (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    function show_nav(sesion)
+    {
+        if(sesion)
+        {
+           var menu=$("#Menu");
+           menu.html("");
+            menu.html( "<ul class='Nav'>"+        
+                "<li >"+
+                 " <a  href='#'>"+sesion.nombre+"</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+                
+                 "</ul> " ); 
+          
+        }
+        else
+        {
+           var menu=$("#Menu");
+           menu.html("");
+            menu.html( "<ul class='Nav'>"+     
+           "<li> <a href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Registro/Registro.html'>Register</a>"
+                +"  <ul> <!--submenu --> </ul>"+"</li> "
+                +"<li class='Barra'> | </li>"+  
+                "<li >"+
+                  "<a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html'>Login</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+               " <li class='Barra'> | </li>" +   
+                "<li >"+
+                 " <a  href='#'>View Menu</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
+                "</li>"+
+                
+                 "</ul> " );
+        }
+        
+    }
+    function veri_asp()
     {
        $("#Asp_Fecha").html('ASP');
        $('#txtfecha').val(""); 
@@ -137,6 +181,14 @@
          
         
     }
+    function Itemsget()
+    {
+          $.ajax({type: "GET", url:"api/ItemsCarrito",contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    
     function mi_carrito_sin_opciones()
     {
          var precio=0;

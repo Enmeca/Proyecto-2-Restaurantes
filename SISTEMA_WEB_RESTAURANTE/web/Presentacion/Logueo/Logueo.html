@@ -9,16 +9,50 @@ and open the template in the editor.
         <title>Inicio de Sesion</title>
         
          <link href="/SISTEMA_WEB_RESTAURANTE/css/Style.css" rel="stylesheet" type="text/css" />
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body>
-        <form>
+         <nav id="Menu"> 
+            <ul class='Nav'>     
+           <li> <a href='/SISTEMA_WEB_RESTAURANTE/index.html'>View Menu</a>
+                <ul> <!--submenu --> </ul></li> </ul></nav>
+        <form class="formulaio">
+             
             <div ><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png" width="100" height="100"></div><h3>Inicio de Sesion</h3>  
             <input class="input_form" type="text" placeholder="Correo" id="Correo"><br><br>
             <input class="input_form" type="password" placeholder="Contrasena" id="password"><br><br>
 
-              <a  href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html"> <input type="button"  id="login" value="Iniciar Sesion"></a>  
+             <input type="button"  id="login" value="Iniciar Sesion"> 
               <a  href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Registro/Registro.html"><input type="button"  id="Enviar" value="Registrarse"></a>
    
         </form>
+        
+        <script>
+            
+            function Load()
+            {
+                $('#login').on("click",()=>{inicio_sesion();});
+                
+            }
+            function inicio_sesion()
+            {
+                var usuario ={
+                    correo: $("#Correo").val(),
+                    clave: $("#password").val()
+                }
+                 $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Logueo",data: JSON.stringify(usuario),contentType: "application/json"})
+             .then( (user)=>{Enlace(user);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function Enlace(user)
+            {
+                if(user)
+                {
+                    window.open("/SISTEMA_WEB_RESTAURANTE/index.html");
+                }
+                
+            }
+            Load();
+        </script>
     </body>
 </html>

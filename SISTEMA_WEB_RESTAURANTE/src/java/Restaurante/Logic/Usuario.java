@@ -10,28 +10,23 @@ package Restaurante.Logic;
  * @author Andres
  */
 public class Usuario {
-    String id;
-    String tipo;
     String correo;
+    String tipo;
+
     String clave;
 
-    public Usuario(String id, String tipo, String correo, String clave) {
-        this.id = id;
-        this.tipo = tipo;
+    public Usuario(String correo, String tipo, String clave) {
         this.correo = correo;
+        this.tipo = tipo;
         this.clave = clave;
     }
+
+ 
 
     public Usuario() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    
 
     public String getTipo() {
         return tipo;
