@@ -13,10 +13,17 @@ and open the template in the editor.
     <body>
         <nav id="Menu"> 
             </nav>
+           <div class="ventana" id="vent">
+        
+        <div id="cerrar"><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/close.png"></div>
+        <div class="Contenedor_plato"  id="Cuerpo_ventana"></div>
+    </div>
         <div class="Contenedor_plato">
             <div class="Datos">
                     <form class="formulaio_veri " id="form">
-            <div ><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png" width="100" height="100"></div><h3>Datos Personales</h3>  
+            <div ><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png" width="100" height="100"></div>
+            <div id="Encabezado"></div>
+            <h3>Datos Personales</h3>  
             <p>Nombre:</p>
             <input class="input_form" type="text" placeholder="Nombre" id="Nombre"><br><br>
             <p>Apellidos:</p>
@@ -50,15 +57,44 @@ and open the template in the editor.
                  </div>
         </div>
         <script>
+            var Adicionales = new Array();
+            var Opciones = new Array();
+            var user;
+            var opcionespedido;
+            var listopciadi = new Array();
+             var plato;
             function Load()
-            {Itemsget();
+            {
+                 document.getElementById("cerrar").addEventListener("click",cerrar);
+             OpcionesPedidoget();
+             Itemsget();
              Islogueado();
+             $("#Compra").on("click",()=>{compra();});
             }
        function Itemsget()
     {
           $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+      function addlink_pagepedido()
+    {
+        var link = "/SISTEMA_WEB_RESTAURANTE/Presentacion/Confirmacion_pedido/Confirmacion_pedido.html";
+         $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Url",data: JSON.stringify(link),contentType: "application/json"})
+      .then( ()=>{OpenLogin();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+    }
+      function addlink()
+    {
+        var link = "/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html";
+         $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Url",data: JSON.stringify(link),contentType: "application/json"})
+      .then( ()=>{OpenLogin();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+    }
+    function OpenLogin()
+    {
+        window.open("/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html");
         
     }
     function Resta_cantidad(item_carrito){
@@ -70,9 +106,233 @@ and open the template in the editor.
              (error)=>{ alert(errorMessage(error.status));}); 
         
     }
-    function show_nav(sesion)
+       function FormaPagoPut(){
+     
+      $.ajax({type: "PUT", url:"/SISTEMA_WEB_RESTAURANTE/api/OpcionesPedido/"+$("#Tipo_pago").val(),contentType: "application/json"})
+      .then( ()=>{},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+     function OpcionesPedidoget(){
+     
+      $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/OpcionesPedido",contentType: "application/json"})
+      .then( (o)=>{opcionespedido=o;console.log(opcionespedido);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    
+    
+    
+    
+     function cerrar(){
+        document.getElementById("vent").style.display="none";
+       // document.getElementById("c1").removeAttribute("disabled");
+    }
+    
+      function Resta()
     {
-        if(sesion)
+        
+        var cuerpoventana=$("#Cuerpo_ventana");
+        if(cuerpoventana.find("#cantidad").val()!="1"){
+           cuerpoventana.find("#cantidad").val(parseInt(cuerpoventana.find("#cantidad").val(),10)-1);  
+            
+        }
+       
+    }
+    function Suma()
+    {
+        
+        var cuerpoventana=$("#Cuerpo_ventana");   
+        cuerpoventana.find("#cantidad").val(parseInt(cuerpoventana.find("#cantidad").val(),10)+1);
+    }
+    
+          function row_opciones_update(cuerpoventana,o,item)
+    {
+        var d =$("<div />");
+        if(!o.opcion.requerido)
+        {d.html("<h3>"+o.opcion.nombre+"</h3>");}
+        else
+        {d.html("<h3>"+o.opcion.nombre+"    (requerido)</h3>");}
+        if(!o.opcion.requerido)
+        {o.adicionales.forEach( (a)=>{
+         var bandera=0;
+         item.adicionales.forEach((ad)=>{
+             if(ad.codigo==a.codigo)
+             {
+                 bandera=1;
+             }
+         });
+          if(bandera==0)
+          {d.append("<div class='Block_window'><input type='checkbox' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");}
+         else
+         {
+             d.append("<div class='Block_window'><input type='checkbox' name='"+a.opcion.nombre+"' value='"+a.codigo+"'  checked='checked'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");
+            
+         }
+            
+        });
+        }
+        else
+        {o.adicionales.forEach( (a)=>{
+         var bandera=0;
+         item.adicionales.forEach((ad)=>{
+             if(ad.codigo==a.codigo)
+             {
+                 bandera=1;
+             }
+         });
+        if(bandera==0)
+        {d.append("<div class='Block_window'><input type='radio' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");}
+        else
+        {
+           d.append("<div class='Block_window'><input type='radio' name='"+a.opcion.nombre+"' value='"+a.codigo+"' checked='checked'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>"); 
+        }
+    
+        });}
+   
+     //d.find("#suma").on("click",()=>{show_opciones(plato.codigo);});
+      cuerpoventana.append(d);    
+        
+        
+    }
+     function veri_adicionales()
+    {
+        var bandera=0;
+        var respuestas = new Array();
+        listopciadi.forEach((a)=>{
+          
+          if(a.opcion.requerido)
+          {
+          $("#Cuerpo_ventana").find("input:checked").each(function () {
+            var valor=$(this).val();
+            a.adicionales.forEach((ad)=>{
+                if(valor==ad.codigo.toString() && a.opcion.codigo==ad.opcion.codigo)
+                {
+                    bandera=1;
+                }
+            });
+            
+            
+         });
+          if(bandera==0)
+            {
+                respuestas.push(a);
+            }
+            
+          }
+         
+           bandera=0; 
+       
+            
+            
+        });
+        return respuestas;
+        
+    }
+    function PlatoEdit(item)
+    {
+           $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Opciones/"+item.plato.codigo, contentType: "application/json"})
+            .then( (OpciAdi)=>{Show_ventana_updateplato(OpciAdi,item);},
+                   (error)=>{ alert(errorMessage(error.status));});   
+        
+        
+    }
+    function Show_ventana_updateplato(OpciAdi,item)
+    {
+     if(OpciAdi.length!=0){
+     listopciadi=OpciAdi;   
+     var cuerpoventana=$("#Cuerpo_ventana");
+    cuerpoventana.html("");
+    cuerpoventana.html("<h3>"+item.plato.nombre+"  $"+ item.plato.precio+"</h3><p>"+item.plato.descripcion+"</p>");
+     OpciAdi.forEach( (o)=>{row_opciones_update(cuerpoventana,o,item);});
+     cuerpoventana.append("<input type='button' value='-' id='menos'>");
+     cuerpoventana.append("<input type='text' value='"+item.cantidad+"' id='cantidad'>");
+      cuerpoventana.append("<input type='button' value='+' id='mas'>");
+    cuerpoventana.append("<input type='button' value='Actualizar' id='Enviar'>");
+      cuerpoventana.find("#mas").on("click",()=>{Suma();});
+       cuerpoventana.find("#menos").on("click",()=>{Resta();});
+       cuerpoventana.find("#Enviar").on("click",()=>{AddPlatoUpdate(item);});
+      cuerpoventana.find("#cantidad").attr('disabled','disabled');
+        document.getElementById("vent").style.display="block";
+         //document.getElementById("c1").disabled="true";
+     }
+        
+        
+    }
+    function AddPlatoUpdate(item_carrito){
+      var item_codigo=item_carrito.plato.codigo.toString();
+      item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
+       item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
+      $.ajax({type: "DELETE", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
+      .then( ()=>{UpdatePlato(item_carrito);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    function UpdatePlato(item_carrito)
+    {
+             var respuestas=veri_adicionales();
+        if(respuestas.length==0){
+            cerrar();
+       var precio=0;
+      Opciones.length=0;
+      Adicionales.length=0;
+      $("#Cuerpo_ventana").find("input:checked").each(function () {
+          
+        var i =$(this).val();
+       
+        listopciadi.forEach( (o)=>{
+           o.adicionales.forEach( (a)=> {
+               
+              if(a.codigo== i) 
+              {
+                      if(Opciones.find(element => element.codigo == o.opcion.codigo))  
+                        {
+                            precio=precio+parseInt(a.precio);
+                        Adicionales.push(a);
+                        }
+                       else
+                        {
+                          precio=precio+parseInt(a.precio);
+                          Opciones.push(o.opcion);
+                         Adicionales.push(a);
+            
+                        }
+              }
+               
+           });
+        });
+  
+        });
+        precio = precio+parseInt(item_carrito.plato.precio);
+        precio = precio*parseInt($("#cantidad").val());
+        var Item_carrito={
+            plato: item_carrito.plato,
+            adicionales: Adicionales,
+            opciones: Opciones,
+            cantidad:$("#cantidad").val(),
+            total: precio    
+        };
+        
+    $.ajax({type: "PUT", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); }
+         
+         else
+         {
+             
+             respuestas.forEach((r)=>{  
+             alertify.notify("Por favor elige de la opcion "+r.opcion.nombre,'error',5, null);
+             
+             });
+         }   
+        
+    }
+    
+    
+    
+    function show_nav(sesion)
+    {user=sesion;
+        if(sesion!=null)
         {
            var menu=$("#Menu");
            menu.html("");
@@ -91,12 +351,31 @@ and open the template in the editor.
          $("#Apellidos").val(sesion.apellidos);
          $("#Telefono").val(sesion.telefono);
          $("#Correo").val(sesion.correo);
-         Direccionesget(sesion);
+         if(opcionespedido.tipo_pedido!="Pasan")
+         {Direccionesget(sesion);}
+          $("#form").append("<br><br><p>Tipo pago:</p> <select class='input_form' id='Tipo_pago'>"+
+            "<option  value='PayPal'>PayPal</option>"+
+            "<option value='Efectivo'>Efectivo</option>"+
+           " <option value='Tarjeta'>Tarjeta</option>"+
+            "</select>");
+        
+         $("#Encabezado").html("");
+         $("#Encabezado").html("<p>Bienvenido de nuevo "+sesion.nombre+" </p>");
         }
         else
         {
+            if(opcionespedido.tipo_pedido!="Pasan"){
             $("#form").append("<p>Direccion:</p>");
             $("#form").append("<input class='input_form' type='text' placeholder='Direccion' id='Direccion'>");
+            }
+            $("#form").append("<br><br><p>Tipo pago:</p> <select class='input_form' id='Tipo_pago'>"+
+            "<option  value='PayPal'>PayPal</option>"+
+            "<option value='Efectivo'>Efectivo</option>"+
+           " <option value='Tarjeta'>Tarjeta</option>"+
+            "</select>");
+            $("#Encabezado").html("");
+            $("#Encabezado").html("<div class='Contenedor_plato'><div class='Block_window_left'><p>Si ya tienes cuenta"+" "+"</p></div><div class='Block_window_left'><br><a id='Iniciosesion' class='link' href='#'>  Inicia sesion aqui</a></div></div>");
+           $("#Encabezado").find('#Iniciosesion').on("click",()=>{addlink_pagepedido();});
            var menu=$("#Menu");
            menu.html("");
             menu.html( "<ul class='Nav'>"+     
@@ -104,7 +383,7 @@ and open the template in the editor.
                 +"  <ul> <!--submenu --> </ul>"+"</li> "
                 +"<li class='Barra'> | </li>"+  
                 "<li >"+
-                  "<a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html'>Login</a>"+
+                  "<a id='login' href='#'>Login</a>"+
                   "<ul>  <!--submenu --> </ul>"+
                 "</li>"+
                " <li class='Barra'> | </li>" +   
@@ -114,15 +393,75 @@ and open the template in the editor.
                 "</li>"+
                 
                  "</ul> " );
-         
+         menu.find('#login').on("click",()=>{addlink();});
         
         }
+        
+    }
+    function compra()
+    {   FormaPagoPut();
+        var Cliente;
+        if(user)
+        {  
+            if(opcionespedido.tipo_pedido!="Pasan")
+            { Cliente={
+                    codigo: user.codigo,
+                    correo: user.correo,
+                    nombre: user.nombre,
+                    apellidos: user.apellidos,
+                    telefono: user.telefono,
+                    usuario: user.usuario,
+                    direccion: $("#Direccion").val()
+                }  }
+            else
+            {Cliente={
+                codigo: user.codigo,
+                correo: user.correo,
+                nombre: user.nombre,
+                apellidos: user.apellidos,
+                telefono: user.telefono,
+                usuario: user.usuario}
+            }
+         }
+         else
+         {
+             if(opcionespedido.tipo_pedido!="Pasan")
+            {
+            Cliente={
+                  
+                    correo: $("#Correo").val(),
+                    nombre: $("#Nombre").val(),
+                    apellidos: $("#Apellidos").val(),
+                    telefono: $("#Telefono").val(),
+                 
+                    direccion: $("#Direccion").val()
+                }  }
+            else
+            {
+                Cliente={
+                  
+                    correo: $("#Correo").val(),
+                    nombre: $("#Nombre").val(),
+                    apellidos: $("#Apellidos").val(),
+                     telefono: $("#Telefono").val()
+                }  
+                
+            }
+             
+         }
+        $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Pedido",data: JSON.stringify(Cliente), contentType: "application/json"})
+            .then( ()=>{},
+                   (error)=>{ alert(errorMessage(error.status));});     
+            
+     
+        
         
     }
     function Select_direccion(direcciones)
     { 
         var select = $("<select />")
         select.addClass("input_form");
+        select.attr('id', 'Direccion');
         $("#form").append("<p>Direcciones:</p>");
       direcciones.forEach((d)=>{ select.append("<option value='"+d.codigo+"'>"+d.direccion+"</option>");});
           $("#form").append(select);      
@@ -153,6 +492,7 @@ and open the template in the editor.
                 div_contenedor.addClass("Contenedor_plato");
                  var div_modulo =  $("<div />");
                 div_modulo.addClass("Orden");
+                  div_modulo.on("click",()=>{PlatoEdit(i);});
                 div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
                div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
               total = total + parseInt(i.total);

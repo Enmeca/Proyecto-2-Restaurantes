@@ -22,8 +22,11 @@ public class Model {
      private Restaurante.data.OpcionDAO opcion;
       private Restaurante.data.AdicionalDAO adicional;
       private Restaurante.data.UsuarioDAO usuario;
+      private Restaurante.data.PedidoDAO pedido;
        private Restaurante.data.AddressBookDAO direccion;
       private HashMap<String,Item_Carrito> items;
+      private OpcionesPedido opcionespedido;
+      private String platoedit;
      
         public static Model instance(){
         if (uniqueInstance == null){
@@ -41,6 +44,8 @@ public class Model {
         usuario= new Restaurante.data.UsuarioDAO();
         direccion=new Restaurante.data.AddressBookDAO();
         items= new HashMap();
+        opcionespedido = null;
+        pedido=new Restaurante.data.PedidoDAO();
     }
 
     public List<Item_Carrito> getItems() {
@@ -56,6 +61,14 @@ public class Model {
     {
     
     return categoria.Categoriasearch(db);
+    }
+    public void Insertclient(Cliente c) throws Exception
+    {
+    if(c.getUsuario()!=null)    
+    usuario.Insert_usuario(db, c);
+    
+    usuario.Insert_Cliente(db, c);
+   
     }
     public List<Plato> Platillosearch(String codigo)
     {
@@ -115,11 +128,16 @@ public class Model {
     
     
     }
+    public void FormaPagoset(String formapago)
+    {
+    opcionespedido.setTipo_pago(formapago);
+    }
     public void restaplatillo(String item)
     {
        if(items.get(item).getCantidad()==1){
        items.remove(item);
        }else{
+           this.opcionespedido.setTotal(this.opcionespedido.getTotal()-(items.get(item).getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad())));
             items.get(item).setTotal(items.get(item).getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad()));
         items.get(item).setCantidad(items.get(item).getCantidad()-1);
          
@@ -139,5 +157,71 @@ public class Model {
         key+=o.getCodigo();
     }
      return key;
+    }
+
+    public OpcionesPedido getOpcionespedido() {
+        return opcionespedido;
+    }
+    public Cliente Clienteget(Cliente_direccion user)
+    {
+        return usuario.ClienteGet(db, user);
+    }
+    public void setOpcionespedido(OpcionesPedido opcionespedido) {
+        this.opcionespedido = opcionespedido;
+    }
+    public void InsertDireccion(Cliente c,String Direccion) throws Exception
+    {
+   this.direccion.Insert_direccion(db, c, Direccion);
+    }
+    public void InsertarPedido(Cliente_direccion c) throws Exception{
+   Cliente client;
+        if(c.getUsuario()==null)
+    { 
+        this.Insertclient(new Cliente(c.getCodigo(),c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),null));
+        client=this.Clienteget(c);
+        c.setCodigo(client.getCodigo());
+        if(!opcionespedido.getTipo_pedido().equals("Pasan")){
+        this.InsertDireccion(client, c.getDireccion());
+        c.setDireccion(Integer.toString(direccion.Direccionget(db, client).getCodigo()));
+        }
+        pedido.InsertPedido(db, opcionespedido, c);
+    }
+    else
+    {
+        pedido.InsertPedido(db, opcionespedido, c);
+        client=new Cliente(c.getCodigo(),c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),new Usuario());
+    }
+    
+    
+    }
+
+    public String getPlatoedit() {
+        return platoedit;
+    }
+
+    public void setPlatoedit(String platoedit) {
+        this.platoedit = platoedit;
+    }
+    public void EditPlato(Item_Carrito i)
+    {
+      if(KeyItem(i).equals(platoedit))
+      {
+         items.get(platoedit).setCantidad(i.getCantidad());
+          items.get(platoedit).setTotal(i.getTotal());
+      }
+      else
+      {
+        if(opcionespedido==null)
+        { items.remove(platoedit);
+        this.GuardarItem(i);}
+        else
+        {
+        opcionespedido.setTotal((opcionespedido.getTotal()- items.get(platoedit).getTotal())+i.getTotal());
+        items.remove(platoedit);
+        this.GuardarItem(i);
+        }
+        
+      
+      }
     }
 }

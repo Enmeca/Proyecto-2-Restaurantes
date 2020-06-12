@@ -9,6 +9,7 @@ and open the template in the editor.
         <title>Registro</title>
         
          <link href="/SISTEMA_WEB_RESTAURANTE/css/Style.css" rel="stylesheet" type="text/css" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body>
          <nav id="Menu"> 
@@ -17,21 +18,70 @@ and open the template in the editor.
                 <ul> <!--submenu --> </ul></li> </ul></nav>
         <form class="formulaio">
             <div ><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png" width="100" height="100"></div><h3>Registro</h3>  
-            <input class="input_form" type="text" placeholder="Cedula" id="cedula"><br><br>
+            <input class="input_form" type="text" placeholder="Correo" id="Correo">
+            <select class="input_form" id="Extension">
+            <option  value="@hotmail.com">@hotmail.com</option>
+            <option value="@gmail.com">@gmail.com</option>
+            <option value="@yahoo.com">@yahoo.com</option>
+            </select><br><br>
             <input class="input_form" type="password" placeholder="Contrasena" id="password"><br><br>
             <input class="input_form" type="password" placeholder="Confirmar contrasena" id="passwordconfirm"><br><br>
             <input class="input_form" type="text" placeholder="Nombre" id="Nombre"><br><br>
             <input class="input_form" type="text" placeholder="Apellidos" id="Apellidos"><br><br>
-            <input class="input_form" type="text" placeholder="Telefono" id="Telefono"><br><br>
-              <input class="input_form" type="text" placeholder="Correo" id="Correo">
-              <select class="input_form" id="Extension">
-        <option  value="@hotmail.com">@hotmail.com</option>
-        <option value="@gmail.com">@gmail.com</option>
-        <option value="@yahoo.com">@yahoo.com</option>
-        </select><br><br><br>
-         <a  href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Registro/Registro.html"><input type="button"  id="Enviar" value="Registrarse"></a>
+            <input class="input_form" type="text" placeholder="Telefono" id="Telefono"><br><br><br>
+
+         <a  href="#"><input type="button"  id="Enviar" value="Registrarse"></a>
           <a  href="/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html"> <input type="button"  id="login" value="Loguearse"></a>     
              
         </form>
+        
+        <script>
+            function Load()
+            {
+                $("#Enviar").on("click",()=>{InsertCliente();});
+                
+            }
+               function inicio_sesion()
+            {
+                var usuario ={
+                    correo: $("#Correo").val()+$("#Extension").val(),
+                    clave: $("#password").val()
+                }
+                 $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Logueo",data: JSON.stringify(usuario),contentType: "application/json"})
+             .then( (user)=>{Enlace(user);},
+             (error)=>{ alert(errorMessage(error.status));}); 
+            }
+            function Enlace(user)
+            {
+                if(user!=null)
+                {
+                    
+                    window.open("/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html");
+                }
+                else
+                {
+                       alertify.notify("Usuario o Contrasena incorrecta",'error',5, null);
+                    
+                }
+                
+            }
+            function InsertCliente()
+            {
+                var Cliente={
+                    correo: $("#Correo").val()+$("#Extension").val(),
+                    nombre: $("#Nombre").val(),
+                    apellidos: $("#Apellidos").val(),
+                    telefono: $("#Telefono").val(),
+                    usuario: {correo:$("#Correo").val(),clave:$("#password").val()}
+                    
+                }
+                
+       $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Clientes",data: JSON.stringify(Cliente),contentType: "application/json"})
+             .then( ()=>{inicio_sesion();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+                
+            }
+            Load();
+        </script>
     </body>
 </html>

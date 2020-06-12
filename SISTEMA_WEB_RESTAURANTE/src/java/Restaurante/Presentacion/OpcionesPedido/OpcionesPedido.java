@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Restaurante.Presentacion.Logueo;
+package Restaurante.Presentacion.OpcionesPedido;
 
 
+import Restaurante.Presentacion.Url.*;
+import Restaurante.Presentacion.Logueo.*;
 import Restaurante.Logic.Cliente;
 import Restaurante.Presentacion.Opcion.*;
 import Restaurante.Presentacion.Plato.*;
@@ -27,50 +29,48 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 
 /**
  *
  * @author Andres
  */
-@Path("/Logueo")
-public class Logueo {
+@Path("/OpcionesPedido")
+public class OpcionesPedido {
     @Context
     HttpServletRequest request;
     
+   
     @POST
-    @Produces({MediaType.APPLICATION_JSON})  
-    @Consumes(MediaType.APPLICATION_JSON)  
-    public Cliente get(Usuario user) {
-        Cliente client=null;
+    @Produces({MediaType.APPLICATION_JSON}) 
+     @Consumes(MediaType.APPLICATION_JSON)
+    public void AddOpciones(Restaurante.Logic.OpcionesPedido opciones) {
         try {
-          client= Model.instance().UserGet(user);
-          request.getSession(true).setAttribute("Usuario", client);
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+             Model.instance().setOpcionespedido(opciones);
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
     
-
     @GET
-    @Produces({MediaType.APPLICATION_JSON})  
-    public Cliente getUser() {
-       
+    @Produces({MediaType.APPLICATION_JSON}) 
+    public Restaurante.Logic.OpcionesPedido get() {
         try {
-         
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+            return Model.instance().getOpcionespedido();
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
-    
-    @DELETE
-    public void Logout()
-    {
-    HttpSession session = request.getSession(true);
-    session.removeAttribute("usuario");
-    session.invalidate();
+    @PUT
+    @Path("{Pago}")
+   @Produces({MediaType.APPLICATION_JSON}) 
+    public void update(@PathParam("Pago") String p) {  
+        try {
+            Model.instance().FormaPagoset(p);
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
     }
 
 }

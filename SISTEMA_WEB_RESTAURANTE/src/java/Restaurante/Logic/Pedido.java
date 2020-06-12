@@ -12,27 +12,28 @@ package Restaurante.Logic;
 public class Pedido {
    int codigo;
    String Tipo_pago;
-   Cliente cliente;
    String tipo_orden; //asap o ...
-   String hora;
    String fecha;
+   String fecha_entrega;
    String estado;
    Address_book direccion;
    double total;
    String tipo_pedido;//delivery o pick-up
+   Cliente cliente;
 
-    public Pedido(int codigo, String Tipo_pago, Cliente cliente, String tipo_orden, String hora, String fecha, String estado, Address_book direccion, double total, String tipo_pedido) {
+    public Pedido(int codigo, String Tipo_pago, String tipo_orden, String fecha, String fecha_entrega, String estado, Address_book direccion, double total, String tipo_pedido, Cliente cliente) {
         this.codigo = codigo;
         this.Tipo_pago = Tipo_pago;
-        this.cliente = cliente;
         this.tipo_orden = tipo_orden;
-        this.hora = hora;
         this.fecha = fecha;
+        this.fecha_entrega = fecha_entrega;
         this.estado = estado;
         this.direccion = direccion;
         this.total = total;
         this.tipo_pedido = tipo_pedido;
+        this.cliente = cliente;
     }
+
 
     public Pedido() {
     }
@@ -67,14 +68,6 @@ public class Pedido {
 
     public void setTipo_orden(String tipo_orden) {
         this.tipo_orden = tipo_orden;
-    }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
     }
 
     public String getFecha() {

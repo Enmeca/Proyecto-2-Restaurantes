@@ -10,6 +10,7 @@ package Restaurante.Logic;
  * @author Andres
  */
 public class Pedido_has_plato_adicional {
+    int codigo;
     Adicional adicional;
     Pedido_has_plato pedido_has_plato;
 

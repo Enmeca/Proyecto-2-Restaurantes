@@ -10,21 +10,22 @@ package Restaurante.Logic;
  * @author Andres
  */
 public class Pedido_has_plato {
+    int codigo;
     Pedido pedido;
     Plato plato;
-    int codigo;
     int cantidad;
 
     public Pedido_has_plato() {
     }
 
-    public Pedido_has_plato(Pedido pedido, Plato plato, int codigo, int cantidad) {
+    public Pedido_has_plato(int Codigo, Pedido pedido, Plato plato, int cantidad) {
+        this.codigo = Codigo;
         this.pedido = pedido;
         this.plato = plato;
-        this.codigo = codigo;
         this.cantidad = cantidad;
     }
 
+  
     public Pedido getPedido() {
         return pedido;
     }

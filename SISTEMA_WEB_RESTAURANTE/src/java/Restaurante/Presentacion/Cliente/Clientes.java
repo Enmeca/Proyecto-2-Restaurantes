@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Restaurante.Presentacion.Logueo;
+package Restaurante.Presentacion.Cliente;
 
 
+import Restaurante.Presentacion.Logueo.*;
 import Restaurante.Logic.Cliente;
 import Restaurante.Presentacion.Opcion.*;
 import Restaurante.Presentacion.Plato.*;
@@ -33,20 +34,19 @@ import javax.ws.rs.core.Context;
  *
  * @author Andres
  */
-@Path("/Logueo")
-public class Logueo {
+@Path("/Clientes")
+public class Clientes {
     @Context
     HttpServletRequest request;
     
     @POST
     @Produces({MediaType.APPLICATION_JSON})  
     @Consumes(MediaType.APPLICATION_JSON)  
-    public Cliente get(Usuario user) {
-        Cliente client=null;
+    public void addCliente(Cliente c) {
+        
         try {
-          client= Model.instance().UserGet(user);
-          request.getSession(true).setAttribute("Usuario", client);
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+        Model.instance().Insertclient(c);
+
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
@@ -55,11 +55,11 @@ public class Logueo {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})  
-    public Cliente getUser() {
+    public Clientes getUser() {
        
         try {
          
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+           return (Clientes) request.getSession(true).getAttribute("Usuario"); 
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }

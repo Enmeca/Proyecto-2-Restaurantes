@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Restaurante.Presentacion.Logueo;
+package Restaurante.Presentacion.Pedido;
 
 
+import Restaurante.Presentacion.Cliente.*;
+import Restaurante.Presentacion.Logueo.*;
 import Restaurante.Logic.Cliente;
+import Restaurante.Logic.Cliente_direccion;
 import Restaurante.Presentacion.Opcion.*;
 import Restaurante.Presentacion.Plato.*;
 import javax.ws.rs.GET;
@@ -33,44 +36,24 @@ import javax.ws.rs.core.Context;
  *
  * @author Andres
  */
-@Path("/Logueo")
-public class Logueo {
+@Path("/Pedido")
+public class Pedido {
     @Context
     HttpServletRequest request;
     
     @POST
     @Produces({MediaType.APPLICATION_JSON})  
     @Consumes(MediaType.APPLICATION_JSON)  
-    public Cliente get(Usuario user) {
-        Cliente client=null;
+    public void addPedido(Cliente_direccion c) {
+        
         try {
-          client= Model.instance().UserGet(user);
-          request.getSession(true).setAttribute("Usuario", client);
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+        Model.instance().InsertarPedido(c);
+
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
     
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})  
-    public Cliente getUser() {
-       
-        try {
-         
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
-        } catch (Exception ex) {
-            throw new NotFoundException(); 
-        }
-    }
-    
-    @DELETE
-    public void Logout()
-    {
-    HttpSession session = request.getSession(true);
-    session.removeAttribute("usuario");
-    session.invalidate();
-    }
 
 }

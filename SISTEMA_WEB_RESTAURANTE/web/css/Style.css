@@ -82,6 +82,13 @@
     
     font-size: 11px;
 }
+.Block_window_left
+{
+    margin-left: 5px;
+    height: auto;
+    width: auto;
+    float:left;
+}
 .Block_window
 {
    
@@ -242,6 +249,10 @@ ul{
     
  float: right;   
     
+}
+.link{
+    text-decoration: none;
+    color: orangered;
 }
 li>a{
    color:black;

@@ -24,7 +24,10 @@ import java.util.HashMap;
 
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.QueryParam;
 
 /**
  *
@@ -58,8 +61,23 @@ public class ItemsCarrito {
             throw new NotFoundException(); 
         }
     }
+    @DELETE
+    @Path("{codigo}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public void PlatoEdit(@PathParam("codigo") String codigo) { 
+        Model.instance().setPlatoedit(codigo);
+    }
     
-    
+    @PUT 
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<Item_Carrito> updateitem(Item_Carrito item) {  
+        try {
+            Model.instance().EditPlato(item);
+            return Model.instance().getItems();
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<Item_Carrito> get_items() {

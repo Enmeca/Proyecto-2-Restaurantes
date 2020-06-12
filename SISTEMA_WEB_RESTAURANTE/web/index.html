@@ -93,20 +93,70 @@
         $('#asp').on("click",()=>{veri_asp();});
         Islogueado();
         Itemsget();
-         $('#Compra').on("click",()=>{ConfirmacionPedido();});
+         $('#Compra').on("click",()=>{AddOpcionesPedido();});
     }
     function ConfirmacionPedido(){
-        
+          window.open("/SISTEMA_WEB_RESTAURANTE/Presentacion/Confirmacion_pedido/Confirmacion_pedido.html");
+      
+    }
+    function AddOpcionesPedido()
+    {
         if(total==0)
         {
              alertify.notify("Seleccione algun plato",'error',5, null);
         }
         else
+        { 
+        var OpcionesPedido;
+        if ($('input[name=asp]').is(':checked'))
         {
+            if ($('input[id=c3]').is(':checked'))
+            {
+              OpcionesPedido={
+                tipo_orden:'ASP',
+                tipo_pedido: 'Express',
+                total: total,
+                tipo_pago:'Efectivo'   
+              }  
+            }
+            else
+            {
+               OpcionesPedido={
+                tipo_orden:'ASP',
+                tipo_pedido: 'Pasan',
+                total: total,
+                tipo_pago:'Efectivo'   
+              }   
+            }
             
-            window.open("/SISTEMA_WEB_RESTAURANTE/Presentacion/Confirmacion_pedido/Confirmacion_pedido.html");
         }
-    }
+        else
+        {
+             if ($('input[id=c3]').is(':checked'))
+            {
+               OpcionesPedido={
+                tipo_orden:$("#txtfecha").val(),
+                tipo_pedido: 'Express',
+                total: total,
+                tipo_pago:'Efectivo'   
+              }    
+            }
+            else
+            {
+              OpcionesPedido={
+                tipo_orden:$("#txtfecha").val(),
+                tipo_pedido: 'Pasan',
+                total: total,
+                tipo_pago:'Efectivo'   
+              }     
+            }
+        }
+         $.ajax({type: "POST", url:"api/OpcionesPedido",data: JSON.stringify(OpcionesPedido),contentType: "application/json"})
+      .then( ()=>{ConfirmacionPedido();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+        }
+        }
     function Islogueado()
     {
         $.ajax({type: "GET", url:"api/Logueo", contentType: "application/json"})
@@ -138,7 +188,7 @@
                 +"  <ul> <!--submenu --> </ul>"+"</li> "
                 +"<li class='Barra'> | </li>"+  
                 "<li >"+
-                  "<a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html'>Login</a>"+
+                  "<a id='login' href='#'>Login</a>"+
                   "<ul>  <!--submenu --> </ul>"+
                 "</li>"+
                " <li class='Barra'> | </li>" +   
@@ -148,6 +198,8 @@
                 "</li>"+
                 
                  "</ul> " );
+          menu.find("#login").on("click",()=>{addlink();});
+         
         }
         
     }
@@ -296,6 +348,7 @@
      listopciadi=OpciAdi;   
      var cuerpoventana=$("#Cuerpo_ventana");
     cuerpoventana.html("");
+    cuerpoventana.html("<h3>"+plato.nombre+"  $"+ plato.precio+"</h3><p>"+plato.descripcion+"</p>");
      OpciAdi.forEach( (o)=>{row_opciones(cuerpoventana,o);});
      cuerpoventana.append("<input type='button' value='-' id='menos'>");
      cuerpoventana.append("<input type='text' value='1' id='cantidad'>");
@@ -337,6 +390,55 @@
         {o.adicionales.forEach( (a)=>{d.append("<div class='Block_window'><input type='checkbox' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");});}
         else
         {o.adicionales.forEach( (a)=>{d.append("<div class='Block_window'><input type='radio' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");});}
+   
+     //d.find("#suma").on("click",()=>{show_opciones(plato.codigo);});
+      cuerpoventana.append(d);    
+        
+        
+    }
+       function row_opciones_update(cuerpoventana,o,item)
+    {
+        var d =$("<div />");
+        if(!o.opcion.requerido)
+        {d.html("<h3>"+o.opcion.nombre+"</h3>");}
+        else
+        {d.html("<h3>"+o.opcion.nombre+"    (requerido)</h3>");}
+        if(!o.opcion.requerido)
+        {o.adicionales.forEach( (a)=>{
+         var bandera=0;
+         item.adicionales.forEach((ad)=>{
+             if(ad.codigo==a.codigo)
+             {
+                 bandera=1;
+             }
+         });
+          if(bandera==0)
+          {d.append("<div class='Block_window'><input type='checkbox' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");}
+         else
+         {
+             d.append("<div class='Block_window'><input type='checkbox' name='"+a.opcion.nombre+"' value='"+a.codigo+"'  checked='checked'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");
+            
+         }
+            
+        });
+        }
+        else
+        {o.adicionales.forEach( (a)=>{
+         var bandera=0;
+         item.adicionales.forEach((ad)=>{
+             if(ad.codigo==a.codigo)
+             {
+                 bandera=1;
+             }
+         });
+        if(bandera==0)
+        {d.append("<div class='Block_window'><input type='radio' name='"+a.opcion.nombre+"' value='"+a.codigo+"'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>");}
+        else
+        {
+           d.append("<div class='Block_window'><input type='radio' name='"+a.opcion.nombre+"' value='"+a.codigo+"' checked='checked'><label for='"+a.nombre+"'>"+a.nombre+"</label></div><div class='Block_precio'>$"+a.precio+"</div><br>"); 
+        }
+    
+        });}
    
      //d.find("#suma").on("click",()=>{show_opciones(plato.codigo);});
       cuerpoventana.append(d);    
@@ -415,6 +517,7 @@
                 div_contenedor.addClass("Contenedor_plato");
                  var div_modulo =  $("<div />");
                 div_modulo.addClass("Orden");
+                div_modulo.on("click",()=>{PlatoEdit(i);});
                 div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
                div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
               total = total + parseInt(i.total);
@@ -439,6 +542,106 @@
           div_items.append("<center><h3>Total: $"+total.toString()+"</h3></center>");
            
        }
+    function PlatoEdit(item)
+    {
+           $.ajax({type: "GET", url:"api/Opciones/"+item.plato.codigo, contentType: "application/json"})
+            .then( (OpciAdi)=>{Show_ventana_updateplato(OpciAdi,item);},
+                   (error)=>{ alert(errorMessage(error.status));});   
+        
+        
+    }
+    function Show_ventana_updateplato(OpciAdi,item)
+    {
+     if(OpciAdi.length!=0){
+     listopciadi=OpciAdi;   
+     var cuerpoventana=$("#Cuerpo_ventana");
+    cuerpoventana.html("");
+    cuerpoventana.html("<h3>"+plato.nombre+"  $"+ plato.precio+"</h3><p>"+plato.descripcion+"</p>");
+     OpciAdi.forEach( (o)=>{row_opciones_update(cuerpoventana,o,item);});
+     cuerpoventana.append("<input type='button' value='-' id='menos'>");
+     cuerpoventana.append("<input type='text' value='"+item.cantidad+"' id='cantidad'>");
+      cuerpoventana.append("<input type='button' value='+' id='mas'>");
+    cuerpoventana.append("<input type='button' value='Actualizar' id='Enviar'>");
+      cuerpoventana.find("#mas").on("click",()=>{Suma();});
+       cuerpoventana.find("#menos").on("click",()=>{Resta();});
+       cuerpoventana.find("#Enviar").on("click",()=>{AddPlatoUpdate(item);});
+      cuerpoventana.find("#cantidad").attr('disabled','disabled');
+        document.getElementById("vent").style.display="block";
+         //document.getElementById("c1").disabled="true";
+     }
+        
+        
+    }
+    function AddPlatoUpdate(item_carrito){
+      var item_codigo=item_carrito.plato.codigo.toString();
+      item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
+       item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
+      $.ajax({type: "DELETE", url:"api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
+      .then( ()=>{UpdatePlato();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    function UpdatePlato()
+    {
+             var respuestas=veri_adicionales();
+        if(respuestas.length==0){
+            cerrar();
+       var precio=0;
+      Opciones.length=0;
+      Adicionales.length=0;
+      $("#Cuerpo_ventana").find("input:checked").each(function () {
+          
+        var i =$(this).val();
+       
+        listopciadi.forEach( (o)=>{
+           o.adicionales.forEach( (a)=> {
+               
+              if(a.codigo== i) 
+              {
+                      if(Opciones.find(element => element.codigo == o.opcion.codigo))  
+                        {
+                            precio=precio+parseInt(a.precio);
+                        Adicionales.push(a);
+                        }
+                       else
+                        {
+                          precio=precio+parseInt(a.precio);
+                          Opciones.push(o.opcion);
+                         Adicionales.push(a);
+            
+                        }
+              }
+               
+           });
+        });
+  
+        });
+        precio = precio+parseInt(plato.precio);
+        precio = precio*parseInt($("#cantidad").val());
+        var Item_carrito={
+            plato: plato,
+            adicionales: Adicionales,
+            opciones: Opciones,
+            cantidad:$("#cantidad").val(),
+            total: precio    
+        };
+        
+    $.ajax({type: "PUT", url:"api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+      .then( (items)=>{Show_items(items);},
+             (error)=>{ alert(errorMessage(error.status));}); }
+         
+         else
+         {
+             
+             respuestas.forEach((r)=>{  
+             alertify.notify("Por favor elige de la opcion "+r.opcion.nombre,'error',5, null);
+             
+             });
+         }   
+        
+    }
+    
+    
     
     function Resta_cantidad(item_carrito){
       var item_codigo=item_carrito.plato.codigo.toString();
@@ -447,6 +650,18 @@
       $.ajax({type: "GET", url:"api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); 
+        
+    }
+    function addlink()
+    {
+        var link = "/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html";
+         $.ajax({type: "POST", url:"api/Url",data: JSON.stringify(link),contentType: "application/json"})
+      .then( ()=>{OpenLogin();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+    }
+    function OpenLogin()
+    {
+        window.open("/SISTEMA_WEB_RESTAURANTE/Presentacion/Logueo/Logueo.html");
         
     }
      function cerrar(){
@@ -510,7 +725,7 @@
     
      </script>
        <script>
-$( "#txtfecha" ).datetimepicker({ minDate: 0,timeFormat: 'H:mm',minTime:'11:00',maxTime:'21:00'});
+$( "#txtfecha" ).datetimepicker({minDate: 0,timeFormat: 'H:mm',minTime:'11:00',maxTime:'21:00'});
 
 </script> 
  

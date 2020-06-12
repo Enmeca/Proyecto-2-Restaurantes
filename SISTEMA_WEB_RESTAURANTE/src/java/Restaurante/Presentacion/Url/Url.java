@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Restaurante.Presentacion.Logueo;
+package Restaurante.Presentacion.Url;
 
 
+import Restaurante.Presentacion.Logueo.*;
 import Restaurante.Logic.Cliente;
 import Restaurante.Presentacion.Opcion.*;
 import Restaurante.Presentacion.Plato.*;
@@ -33,44 +34,35 @@ import javax.ws.rs.core.Context;
  *
  * @author Andres
  */
-@Path("/Logueo")
-public class Logueo {
+@Path("/Url")
+public class Url {
     @Context
     HttpServletRequest request;
     
+   
     @POST
-    @Produces({MediaType.APPLICATION_JSON})  
-    @Consumes(MediaType.APPLICATION_JSON)  
-    public Cliente get(Usuario user) {
-        Cliente client=null;
+    @Produces({MediaType.APPLICATION_JSON}) 
+     @Consumes(MediaType.APPLICATION_JSON)
+    public void Addurl(String url) {
         try {
-          client= Model.instance().UserGet(user);
-          request.getSession(true).setAttribute("Usuario", client);
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+             String a=(String) request.getSession(true).getAttribute("Url") ;
+           request.getSession(true).setAttribute("Url", url);
+            a=(String) request.getSession(true).getAttribute("Url") ;
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
-    
-
     @GET
-    @Produces({MediaType.APPLICATION_JSON})  
-    public Cliente getUser() {
+    @Produces({MediaType.APPLICATION_JSON}) 
+    public String getUrl() {
        
         try {
          
-           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
+           return (String) request.getSession(true).getAttribute("Url"); 
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
-    
-    @DELETE
-    public void Logout()
-    {
-    HttpSession session = request.getSession(true);
-    session.removeAttribute("usuario");
-    session.invalidate();
-    }
+   
 
 }
