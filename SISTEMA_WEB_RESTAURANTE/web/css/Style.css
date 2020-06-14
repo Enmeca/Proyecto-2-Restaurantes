@@ -89,6 +89,20 @@
     width: auto;
     float:left;
 }
+.Block_window_opciones
+{
+   
+    height: auto;
+    width: 20%;
+    float:left;
+}
+.Block_window_block2
+{
+   
+    height: auto;
+    width: 60%;
+    float:left;
+}
 .Block_window
 {
    
@@ -142,7 +156,7 @@ z-index: 50;        /* lo colocamos por encima del resto de componentes*/
      content: '\2B9D';
    
 }
-.acordeon__item input[type="checkbox"] {
+.acordeon__item input[type="checkbox"],.Display_none{
     
     display: none;
 }

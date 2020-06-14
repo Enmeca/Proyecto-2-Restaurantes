@@ -10,23 +10,17 @@ package Restaurante.Logic;
  * @author Andres
  */
 public class Pedido_has_plato_opcion {
-    int codigo;
+  
     Opcion opcion;
     Pedido_has_plato pedido_has_plato;
 
-    public Pedido_has_plato_opcion(int codigo, Opcion opcion, Pedido_has_plato pedido_has_plato) {
-        this.codigo = codigo;
+    public Pedido_has_plato_opcion( Opcion opcion, Pedido_has_plato pedido_has_plato) {
+       
         this.opcion = opcion;
         this.pedido_has_plato = pedido_has_plato;
     }
 
-    public int getCodigo() {
-        return codigo;
-    }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
 
    
     public Pedido_has_plato_opcion() {

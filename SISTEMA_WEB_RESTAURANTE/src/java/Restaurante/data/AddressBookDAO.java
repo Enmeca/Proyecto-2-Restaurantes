@@ -49,6 +49,20 @@ public class AddressBookDAO {
         } catch (SQLException ex) { }
         return null ;
     }
+     public Address_book Direcciongetbycodigo (RelDatabase db,int codigo){
+      
+  
+
+        try {
+            String sql="select * from cliente inner join address_book on cliente.Email=address_book.cliente_Email where address_book.Codigo='%s'";
+         sql=String.format(sql,codigo);
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                return direccion(rs);
+            }
+        } catch (SQLException ex) { }
+        return null ;
+    }
        public void Insert_direccion(RelDatabase db,Cliente user,String direccion) throws Exception
     {
        String sql="insert into address_book (Direccion,cliente_Codigo,cliente_Email) values('%s','%s','%s')";

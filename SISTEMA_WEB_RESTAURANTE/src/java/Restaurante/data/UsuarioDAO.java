@@ -44,6 +44,19 @@ public class UsuarioDAO {
         } catch (SQLException ex) { }
         return null ;
     }
+     public Cliente ClienteGetbycodigo (RelDatabase db,int c){
+      
+        try {
+            
+            String sql="select * from Cliente where Codigo='%s'";
+           sql=String.format(sql,c);
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                return cliente1(rs);
+            }
+        } catch (SQLException ex) { }
+        return null ;
+    }
     public void Insert_usuario(RelDatabase db,Cliente user) throws Exception
     {
        String sql="insert into usuario(Correo,Tipo,clave) values('%s','%s','%s') ";

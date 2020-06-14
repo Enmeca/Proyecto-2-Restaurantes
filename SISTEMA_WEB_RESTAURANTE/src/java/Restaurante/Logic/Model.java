@@ -23,7 +23,10 @@ public class Model {
       private Restaurante.data.AdicionalDAO adicional;
       private Restaurante.data.UsuarioDAO usuario;
       private Restaurante.data.PedidoDAO pedido;
-       private Restaurante.data.AddressBookDAO direccion;
+      private Restaurante.data.AddressBookDAO direccion;
+      private Restaurante.data.Pedido_has_platoDAO pedidohasplato;
+      private Restaurante.data.Pedido_has_plato_opcionDAO pedidohasplatoopcion;
+      private Restaurante.data.Pedido_has_plato_adicionalDAO pedidohasplatoadicional;
       private HashMap<String,Item_Carrito> items;
       private OpcionesPedido opcionespedido;
       private String platoedit;
@@ -46,6 +49,9 @@ public class Model {
         items= new HashMap();
         opcionespedido = null;
         pedido=new Restaurante.data.PedidoDAO();
+        pedidohasplato = new Restaurante.data.Pedido_has_platoDAO();
+        pedidohasplatoopcion=new Restaurante.data.Pedido_has_plato_opcionDAO();
+        pedidohasplatoadicional=new Restaurante.data.Pedido_has_plato_adicionalDAO();
     }
 
     public List<Item_Carrito> getItems() {
@@ -87,7 +93,22 @@ public class Model {
     {
     return opcion.Opcionget(db, codigo);
     }
-    
+    public Pedido Pedidogetbycodigo(int Codigo)
+    {
+    return pedido.Pedidogetbycodigo(db, Codigo);
+    }
+    public Pedido_has_plato Pedidohasplatogetbycodigo(int c)
+    {
+    return pedidohasplato.Pedidohasplatogetbycodigo(db, c);
+    }
+    public Cliente Clientegetbycodigo(int c)
+    {
+    return usuario.ClienteGetbycodigo(db, c);
+    }
+    public Address_book Direcciongetbycodigo(int c)
+    {
+    return direccion.Direcciongetbycodigo(db, c);
+    }
    public List<Adicional> AdicionalSearch(int codigo)
    {
        return adicional.Adicionalsearch(db, codigo);
@@ -185,11 +206,39 @@ public class Model {
         c.setDireccion(Integer.toString(direccion.Direccionget(db, client).getCodigo()));
         }
         pedido.InsertPedido(db, opcionespedido, c);
+        Pedido pedido_1=pedido.Pedidoget(db, client);
+        for(Item_Carrito item:items.values())
+        {
+            pedidohasplato.InsertPedidohasplato(db, new Pedido_has_plato(0,pedido_1,item.getPlato(),item.getCantidad()));
+            Pedido_has_plato pedido_has_plato=pedidohasplato.Pedidohasplatoget(db, pedido_1);
+            for(Adicional a:item.getAdicionales())
+            {
+                pedidohasplatoopcion.InsertPedidohasplato(db, new Pedido_has_plato_opcion(a.getOpcion(),pedido_has_plato));
+                
+                pedidohasplatoadicional.InsertPedidohasplatoadicional(db,  new Pedido_has_plato_adicional(a,new Pedido_has_plato_opcion(a.getOpcion(),pedido_has_plato)));
+                
+            }
+        }
     }
     else
     {
         pedido.InsertPedido(db, opcionespedido, c);
-        client=new Cliente(c.getCodigo(),c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),new Usuario());
+        
+        client=new Cliente(c.getCodigo(),c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),c.getUsuario());
+        
+        Pedido pedido_1=pedido.Pedidoget(db, client);
+        for(Item_Carrito item:items.values())
+        {
+            pedidohasplato.InsertPedidohasplato(db, new Pedido_has_plato(0,pedido_1,item.getPlato(),item.getCantidad()));
+            Pedido_has_plato pedido_has_plato=pedidohasplato.Pedidohasplatoget(db, pedido_1);
+            for(Adicional a:item.getAdicionales())
+            {
+                pedidohasplatoopcion.InsertPedidohasplato(db, new Pedido_has_plato_opcion(a.getOpcion(),pedido_has_plato));
+                
+                pedidohasplatoadicional.InsertPedidohasplatoadicional(db,  new Pedido_has_plato_adicional(a,new Pedido_has_plato_opcion(a.getOpcion(),pedido_has_plato)));
+                
+            }
+        }
     }
     
     
