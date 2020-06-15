@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class PedidoDAO {
     public void InsertPedido (RelDatabase db,OpcionesPedido o,Cliente_direccion c){
-       Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+       Format formatter = new SimpleDateFormat("MM/dd/yyyy");
       String sql="";
        if(!o.getTipo_orden().equals("ASP")){
             if(o.getTipo_pedido().equals("Express")){
@@ -67,6 +67,19 @@ public class PedidoDAO {
         } catch (SQLException ex) { }
         return null ;
     }
+     public List<Pedido> Pedidosget(RelDatabase db,String codigo)
+     {
+       List<Pedido> pedidos = new ArrayList<>();
+        try {
+            String sql="select * from pedido where cliente_Codigo='%s'";
+         sql=String.format(sql,codigo);
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                pedidos.add(pedido(rs));
+            }
+        } catch (SQLException ex) { }
+        return pedidos ;
+     }
      public Pedido Pedidogetbycodigo (RelDatabase db,int codigo){
       
         try {

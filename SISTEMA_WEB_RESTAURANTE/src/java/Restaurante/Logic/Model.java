@@ -187,6 +187,10 @@ public class Model {
     {
         return usuario.ClienteGet(db, user);
     }
+    public List<Pedido> Pedidosget(String codigo)
+    {
+    return pedido.Pedidosget(db, codigo);
+    }
     public void setOpcionespedido(OpcionesPedido opcionespedido) {
         this.opcionespedido = opcionespedido;
     }
@@ -194,7 +198,7 @@ public class Model {
     {
    this.direccion.Insert_direccion(db, c, Direccion);
     }
-    public void InsertarPedido(Cliente_direccion c) throws Exception{
+    public Pedido InsertarPedido(Cliente_direccion c) throws Exception{
    Cliente client;
         if(c.getUsuario()==null)
     { 
@@ -219,6 +223,8 @@ public class Model {
                 
             }
         }
+        limpiar();
+       return pedido_1;
     }
     else
     {
@@ -239,11 +245,17 @@ public class Model {
                 
             }
         }
+        limpiar();
+        return pedido_1;
     }
     
     
     }
-
+    public void limpiar()
+    {
+    items.clear();
+    this.opcionespedido=null;
+    }
     public String getPlatoedit() {
         return platoedit;
     }

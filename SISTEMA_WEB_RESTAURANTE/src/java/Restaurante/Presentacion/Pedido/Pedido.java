@@ -44,16 +44,26 @@ public class Pedido {
     @POST
     @Produces({MediaType.APPLICATION_JSON})  
     @Consumes(MediaType.APPLICATION_JSON)  
-    public void addPedido(Cliente_direccion c) {
+    public Restaurante.Logic.Pedido addPedido(Cliente_direccion c) {
         
         try {
-        Model.instance().InsertarPedido(c);
+        return Model.instance().InsertarPedido(c);
 
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
-    
+    @GET
+    @Path("{codigo}")
+    @Produces({MediaType.APPLICATION_JSON}) 
+    public List<Restaurante.Logic.Pedido> GetPedidos(@PathParam("codigo") String codigo) {
+        try {
+           // Model.instance().personaDelete(cedula);
+          return Model.instance().Pedidosget(codigo);
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
 
 
 }

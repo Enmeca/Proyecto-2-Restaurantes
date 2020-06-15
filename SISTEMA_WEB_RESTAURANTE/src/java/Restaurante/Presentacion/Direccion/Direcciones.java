@@ -15,10 +15,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import Restaurante.Logic.Categoria;
 import Restaurante.Logic.Cliente;
+import Restaurante.Logic.Cliente_direccion;
 import Restaurante.Logic.Model;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 
 /**
  *
@@ -34,6 +36,18 @@ public class Direcciones {
         try {
           
             return Model.instance().Direccionesget(cliente);
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void InsertDireccion(Cliente_direccion  cliente) {
+        try {
+          Cliente client= new Cliente();
+          client.setCodigo(cliente.getCodigo());
+          client.setCorreo(cliente.getCorreo());
+            Model.instance().InsertDireccion(client, cliente.getDireccion());
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }

@@ -18,9 +18,37 @@
     width: 460px;
     float:left;
 }
+th, td {
+  padding: 4px;
+  text-align: left;
+  border-bottom: 1px solid black;
+}
 .formulaio 
 {
     max-width: 500px;
+    margin: 2rem auto;
+    border: 5px solid orangered;
+    padding: 2rem;
+    
+
+    
+}
+li>ul{
+    
+    display: none;
+    position: absolute;
+    min-width: 92px;
+}
+.Nav>li:hover>ul{
+   
+ display: block;
+background: orange; 
+ 
+    
+}
+.formulario_table 
+{
+    max-width: 700px;
     margin: 2rem auto;
     border: 5px solid orangered;
     padding: 2rem;
@@ -96,11 +124,15 @@
     width: 20%;
     float:left;
 }
+table{
+    width: 100%;
+    
+}
 .Block_window_block2
 {
    
     height: auto;
-    width: 60%;
+    width: 80%;
     float:left;
 }
 .Block_window

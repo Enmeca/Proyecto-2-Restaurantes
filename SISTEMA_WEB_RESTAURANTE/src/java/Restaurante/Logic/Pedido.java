@@ -34,6 +34,16 @@ public class Pedido {
         this.cliente = cliente;
     }
 
+    public String getFecha_entrega() {
+        return fecha_entrega;
+    }
+
+    public void setFecha_entrega(String fecha_entrega) {
+        this.fecha_entrega = fecha_entrega;
+    }
+
+
+
 
     public Pedido() {
     }

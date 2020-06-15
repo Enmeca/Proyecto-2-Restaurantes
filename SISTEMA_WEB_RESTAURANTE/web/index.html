@@ -164,6 +164,12 @@
                    (error)=>{ alert(errorMessage(error.status));}); 
         
     }
+      function Salir()
+    {
+      $.ajax({type: "DELETE", url:"/SISTEMA_WEB_RESTAURANTE/api/Logueo", contentType: "application/json"})
+            .then( ()=>{show_nav(null);},
+                   (error)=>{ alert(errorMessage(error.status));});   
+    }
     function show_nav(sesion)
     {
         if(sesion)
@@ -172,12 +178,12 @@
            menu.html("");
             menu.html( "<ul class='Nav'>"+        
                 "<li >"+
-                 " <a  href='#'>"+sesion.nombre+"</a>"+
-                  "<ul>  <!--submenu --> </ul>"+
+                 " <a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html'>"+sesion.nombre+"</a>"+
+                  "<ul>  <li><a id='salir' href='/SISTEMA_WEB_RESTAURANTE/index.html'>Salir</a></li>  </ul>"+
                 "</li>"+
                 
                  "</ul> " ); 
-          
+           $("#Menu").find("#salir").on("click",()=>{Salir();});
         }
         else
         {

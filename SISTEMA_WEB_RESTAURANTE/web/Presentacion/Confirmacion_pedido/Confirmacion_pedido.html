@@ -20,7 +20,7 @@ and open the template in the editor.
         <div id="cerrar"><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/close.png"></div>
         <div class="Contenedor_plato"  id="Cuerpo_ventana"></div>
     </div>
-        <div class="Contenedor_plato">
+        <div class="Contenedor_plato" id="Contenedor_confirpedido">
             <div class="Datos">
                     <form class="formulaio_veri " id="form">
             <div ><img src="/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png" width="100" height="100"></div>
@@ -118,7 +118,7 @@ and open the template in the editor.
      function OpcionesPedidoget(){
      
       $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/OpcionesPedido",contentType: "application/json"})
-      .then( (o)=>{opcionespedido=o;console.log(opcionespedido);},
+      .then( (o)=>{opcionespedido=o;},
              (error)=>{ alert(errorMessage(error.status));}); 
         
     }
@@ -330,7 +330,12 @@ and open the template in the editor.
         
     }
     
-    
+    function Salir()
+    {
+      $.ajax({type: "DELETE", url:"/SISTEMA_WEB_RESTAURANTE/api/Logueo", contentType: "application/json"})
+            .then( ()=>{show_nav(null);},
+                   (error)=>{ alert(errorMessage(error.status));});   
+    }
     
     function show_nav(sesion)
     {user=sesion;
@@ -340,15 +345,15 @@ and open the template in the editor.
            menu.html("");
             menu.html( "<ul class='Nav'>"+        
                 "<li >"+
-                 " <a  href='#'>"+sesion.nombre+"</a>"+
-                  "<ul>  <!--submenu --> </ul>"+
+                 " <a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html'>"+sesion.nombre+"</a>"+
+                  "<ul>  <li><a id='salir' href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Confirmacion_pedido/Confirmacion_pedido.html'>Salir</a></li> </ul>"+
                 "</li>"+
                  "<li >"+
-                 " <a  href='/SISTEMA_WEB_RESTAURANTE/index.html'>View Menu</a>"+
+                 " <a href='/SISTEMA_WEB_RESTAURANTE/index.html'>View Menu</a>"+
                   "<ul>  <!--submenu --> </ul>"+
                 "</li>"+
                  "</ul> " ); 
-         
+         $("#Menu").find("#salir").on("click",()=>{Salir();});
          $("#Nombre").val(sesion.nombre);
          $("#Apellidos").val(sesion.apellidos);
          $("#Telefono").val(sesion.telefono);
@@ -402,7 +407,7 @@ and open the template in the editor.
     }
     function compra()
     {   
-        if($("#form").find("#Nombre").val()!=" " && $("#form").find("#Apellidos").val()!=" " && $("#form").find("#Correo").val()!=" " && $("#form").find("#Telefono").val()!=" ")
+        if($("#form").find("#Nombre").val()!="" && $("#form").find("#Apellidos").val()!="" && $("#form").find("#Correo").val()!="" && $("#form").find("#Telefono").val()!="")
         {  
            
         FormaPagoPut();
@@ -456,7 +461,7 @@ and open the template in the editor.
              
          }
         $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Pedido",data: JSON.stringify(Cliente), contentType: "application/json"})
-            .then( ()=>{},
+            .then( (numeropedido)=>{ShowPedido(numeropedido);},
                    (error)=>{ alert(errorMessage(error.status));});     
             
      
@@ -467,6 +472,12 @@ and open the template in the editor.
              alertify.notify("Hay campos vacios que debe llenar",'error',5, null);
         }
         
+    }
+    function ShowPedido(numpedido)
+    {
+       
+        $("#Contenedor_confirpedido").html(" ");
+        $("#Contenedor_confirpedido").html("<form class='formulaio'><center><div ><img src='/SISTEMA_WEB_RESTAURANTE/Imagen/tasty.png' width='100' height='100'></div></center><center><h3>Muchas gracias por su compra</h3><h3>Numero de compra:"+numpedido.codigo+"</h3></center></form>")
     }
     function Select_direccion(direcciones)
     { 

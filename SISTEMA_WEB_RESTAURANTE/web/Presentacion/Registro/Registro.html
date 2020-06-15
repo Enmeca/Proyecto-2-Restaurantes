@@ -39,8 +39,15 @@ and open the template in the editor.
             function Load()
             {
                 $("#Enviar").on("click",()=>{InsertCliente();});
-                
+                $("#login").on("click",()=>{addlink();});
             }
+               function addlink()
+                {
+                var link = "/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html";
+                $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Url",data: JSON.stringify(link),contentType: "application/json"})
+                .then( ()=>{OpenLogin();},
+             (error)=>{ alert(errorMessage(error.status));}); 
+                }
                function inicio_sesion()
             {
                 var usuario ={
