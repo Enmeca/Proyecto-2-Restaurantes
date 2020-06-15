@@ -41,17 +41,7 @@ and open the template in the editor.
              <div class="Items">
                  <div class="formulaio_veri">
                  <center><h3>Mi carrito</h3><center>
-                 <div class="Contenedor_plato">
-                <div  class="type_Orden">   
-                <input type="radio" name="acordeon" id="c3">
-                <label class="switch_order" for="c3">Delivery</label>
-               </div>  
-                <div  class="type_Orden">   
-                <input type="radio" name="acordeon" id="c4">
-                <label class="switch_order" for="c4">Pick-up</label>
-               </div> 
-                
-             </div> 
+                 
                  
             <div id="items" class="items"><br><br> </div>
           <input class="Margen_left" type="button" id="Compra" value="Confirmar">
@@ -406,7 +396,8 @@ and open the template in the editor.
         
     }
     function compra()
-    {   
+    {   if($("#total").html()!="Total: $0")
+        {
         if($("#form").find("#Nombre").val()!="" && $("#form").find("#Apellidos").val()!="" && $("#form").find("#Correo").val()!="" && $("#form").find("#Telefono").val()!="")
         {  
            
@@ -471,7 +462,12 @@ and open the template in the editor.
             
              alertify.notify("Hay campos vacios que debe llenar",'error',5, null);
         }
+    }
+    else
+    {
+        alertify.notify("Debes volver a View menu y seleccionar algun platillo",'error',5, null);
         
+    }
     }
     function ShowPedido(numpedido)
     {
@@ -536,10 +532,13 @@ and open the template in the editor.
              div_items.append(div_contenedor); 
               
           });
-          div_items.append("<h3 class='Margen_left'>Total: $"+total.toString()+"</h3>");
+          div_items.append("<h3 id='total' class='Margen_left'>Total: $"+total.toString()+"</h3>");
            
        }
        Load();
        </script>
+       <br><br><footer>
+    <h5>Sistema Web Restaurante SoftA&E Inc. ©2020 Tsf, Inc.</h5>
+</footer>
     </body>
 </html>
