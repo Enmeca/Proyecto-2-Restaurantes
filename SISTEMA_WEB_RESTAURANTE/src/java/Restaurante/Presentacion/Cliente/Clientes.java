@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 
 /**
@@ -52,14 +53,14 @@ public class Clientes {
         }
     }
     
-
+   
     @GET
     @Produces({MediaType.APPLICATION_JSON})  
-    public Clientes getUser() {
+    public Cliente getUser() {
        
         try {
          
-           return (Clientes) request.getSession(true).getAttribute("Usuario"); 
+           return (Cliente) request.getSession(true).getAttribute("Usuario"); 
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }

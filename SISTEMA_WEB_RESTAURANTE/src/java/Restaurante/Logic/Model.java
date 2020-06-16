@@ -251,6 +251,11 @@ public class Model {
     
     
     }
+    public void ClienteUpdate(Cliente c) throws Exception
+    {
+    usuario.UsuarioUpdate(c.getUsuario(), db);
+    usuario.ClienteUpdate(c, db);
+    }
     public void limpiar()
     {
     items.clear();

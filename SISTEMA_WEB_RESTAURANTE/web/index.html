@@ -180,8 +180,11 @@
                 "<li >"+
                  " <a  href='/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html'>"+sesion.nombre+"</a>"+
                   "<ul>  <li><a id='salir' href='/SISTEMA_WEB_RESTAURANTE/index.html'>Salir</a></li>  </ul>"+
+                "</li><li class='Barra'> | </li>"+
+                "<li >"+
+                 " <a  href='/SISTEMA_WEB_RESTAURANTE/Inicio.html'>Homepage</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
                 "</li>"+
-                
                  "</ul> " ); 
            $("#Menu").find("#salir").on("click",()=>{Salir();});
         }
@@ -201,8 +204,11 @@
                 "<li >"+
                  " <a  href='#'>View Menu</a>"+
                   "<ul>  <!--submenu --> </ul>"+
+                "</li><li class='Barra'> | </li>"+
+                 "<li >"+
+                 " <a  href='/SISTEMA_WEB_RESTAURANTE/Inicio.html'>Homepage</a>"+
+                  "<ul>  <!--submenu --> </ul>"+
                 "</li>"+
-                
                  "</ul> " );
           menu.find("#login").on("click",()=>{addlink();});
          

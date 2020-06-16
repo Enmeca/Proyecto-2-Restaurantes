@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 
 /**
@@ -52,7 +53,18 @@ public class Logueo {
         }
     }
     
-
+    @PUT 
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateCliente(Cliente c) {  
+        try {
+            
+            request.getSession(true).setAttribute("Usuario", c);
+            Model.instance().ClienteUpdate(c);
+           
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
     @GET
     @Produces({MediaType.APPLICATION_JSON})  
     public Cliente getUser() {

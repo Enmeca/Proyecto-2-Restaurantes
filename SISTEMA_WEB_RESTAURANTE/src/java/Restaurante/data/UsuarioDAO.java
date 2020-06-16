@@ -67,6 +67,26 @@ public class UsuarioDAO {
             throw new Exception("Ya existe");
         }
     }
+    public void ClienteUpdate(Cliente c,RelDatabase db ) throws Exception{
+        String sql="update cliente set Email='%s',Nombre='%s', Apellidos='%s', Telefono='%s' "+ 
+                "where Codigo='%s'";
+        sql=String.format(sql,c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),c.getCodigo());
+        
+        int count=db.executeUpdate(sql);
+        if (count==0){
+            throw new Exception("Cliente no existe");
+        }
+    }
+     public void UsuarioUpdate(Usuario u,RelDatabase db ) throws Exception{
+        String sql="update usuario set clave='%s' "+ 
+                "where Correo='%s'";
+        sql=String.format(sql,u.getClave(),u.getCorreo());
+        
+        int count=db.executeUpdate(sql);
+        if (count==0){
+            throw new Exception("Usuario no existe");
+        }
+    }
       public void Insert_Cliente(RelDatabase db,Cliente user) throws Exception
     {
          String sql="";
