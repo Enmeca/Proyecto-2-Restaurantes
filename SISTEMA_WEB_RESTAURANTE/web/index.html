@@ -371,7 +371,7 @@
        cuerpoventana.find("#Enviar").on("click",()=>{Micarrito();});
       cuerpoventana.find("#cantidad").attr('disabled','disabled');
         document.getElementById("vent").style.display="block";
-         document.getElementById("c1").disabled="true";
+         
      
     }
     }
@@ -568,7 +568,7 @@
      listopciadi=OpciAdi;   
      var cuerpoventana=$("#Cuerpo_ventana");
     cuerpoventana.html("");
-    cuerpoventana.html("<h3>"+plato.nombre+"  $"+ plato.precio+"</h3><p>"+plato.descripcion+"</p>");
+    cuerpoventana.html("<h3>"+item.plato.nombre+"  $"+ item.plato.precio+"</h3><p>"+item.plato.descripcion+"</p>");
      OpciAdi.forEach( (o)=>{row_opciones_update(cuerpoventana,o,item);});
      cuerpoventana.append("<input class='input_orange' type='button' value='-' id='menos'>");
      cuerpoventana.append("<input type='text' value='"+item.cantidad+"' id='cantidad'>");
@@ -589,11 +589,11 @@
       item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
        item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
       $.ajax({type: "DELETE", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
-      .then( ()=>{UpdatePlato();},
+      .then( ()=>{UpdatePlato(item_carrito.plato);},
              (error)=>{ alert(errorMessage(error.status));}); 
         
     }
-    function UpdatePlato()
+    function UpdatePlato(dish)
     {
              var respuestas=veri_adicionales();
         if(respuestas.length==0){
@@ -628,10 +628,10 @@
         });
   
         });
-        precio = precio+parseInt(plato.precio);
+        precio = precio+parseInt(dish.precio);
         precio = precio*parseInt($("#cantidad").val());
         var Item_carrito={
-            plato: plato,
+            plato: dish,
             adicionales: Adicionales,
             opciones: Opciones,
             cantidad:$("#cantidad").val(),
@@ -656,7 +656,8 @@
     
     
     function Resta_cantidad(item_carrito){
-      var item_codigo=item_carrito.plato.codigo.toString();
+      console.log(item_carrito);
+        var item_codigo=item_carrito.plato.codigo.toString();
       item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
        item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
       $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
@@ -678,7 +679,7 @@
     }
      function cerrar(){
         document.getElementById("vent").style.display="none";
-        document.getElementById("c1").removeAttribute("disabled");
+      
     }
     function buscarcategorias(){
     $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Categorias",contentType: "application/json"})

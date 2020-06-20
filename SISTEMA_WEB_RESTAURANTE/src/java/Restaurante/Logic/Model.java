@@ -191,6 +191,7 @@ public class Model {
        if(items.get(item).getCantidad()==1){
        items.remove(item);
        }else{
+           if(this.opcionespedido!=null)
            this.opcionespedido.setTotal(this.opcionespedido.getTotal()-(items.get(item).getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad())));
             items.get(item).setTotal(items.get(item).getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad()));
         items.get(item).setCantidad(items.get(item).getCantidad()-1);
