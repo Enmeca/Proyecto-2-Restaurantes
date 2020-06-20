@@ -96,7 +96,7 @@ and open the template in the editor.
         $("#form_direccion").append("<p>Mis direcciones:</p>");
       direcciones.forEach((d)=>{ select.append("<option value='"+d.codigo+"'>"+d.direccion+"</option>");});
           $("#form_direccion").append(select);      
-        $("#form_direccion").append("<h3>Anadir direccion</h3><p>Direccion:</p><input class='input_form' type='text' id='Direccion'><br><br><input type='button' id='Enviar' value='Anadir'>");
+        $("#form_direccion").append("<h3>Anadir direccion</h3><p>Direccion:</p><input class='input_form' type='text' id='Direccion'><br><br><input class='input_orange' type='button' id='Enviar' value='Anadir'>");
           $("#Enviar").on("click",()=>{ EnviarDireccion();});
        
     }
@@ -109,7 +109,7 @@ and open the template in the editor.
                           "<p>Apellidos:</p><input id='Apellidos' class='input_form' type='text' value='"+sesion.apellidos+"'>"+
                           "<p>Telefono:</p><input id='Telefono' class='input_form' type='text' value='"+sesion.telefono+"'>"+
                           "<p>Contrasena:</p><input id='Contrasena' class='input_form' type='password' value='"+sesion.usuario.clave+"'>"+
-                          "<br><br><input type='button' id='actualizar' value='Actualizar'></form>"
+                          "<br><br><input class='input_orange' type='button' id='actualizar' value='Actualizar'></form>"
                         
                 );
         $("#actualizar").on("click",()=>{UsuarioUpdate();});

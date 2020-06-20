@@ -69,7 +69,7 @@
                 
              </div> 
             <div id="items" class="items"><br><br> </div>
-           <center> <input type="button" id="Compra" value="Comprar"></center>
+           <center> <input class='input_orange' type="button" id="Compra" value="Comprar"></center>
         </div>    
     </div>
           
@@ -151,7 +151,7 @@
               }     
             }
         }
-         $.ajax({type: "POST", url:"api/OpcionesPedido",data: JSON.stringify(OpcionesPedido),contentType: "application/json"})
+         $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/OpcionesPedido",data: JSON.stringify(OpcionesPedido),contentType: "application/json"})
       .then( ()=>{ConfirmacionPedido();},
              (error)=>{ alert(errorMessage(error.status));}); 
         
@@ -159,7 +159,7 @@
         }
     function Islogueado()
     {
-        $.ajax({type: "GET", url:"api/Logueo", contentType: "application/json"})
+        $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Logueo", contentType: "application/json"})
             .then( (sesion)=>{show_nav(sesion);},
                    (error)=>{ alert(errorMessage(error.status));}); 
         
@@ -238,7 +238,7 @@
     }
     function show_opciones(platillo){
          plato=platillo;
-           $.ajax({type: "GET", url:"api/Opciones/"+platillo.codigo, contentType: "application/json"})
+           $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Opciones/"+platillo.codigo, contentType: "application/json"})
             .then( (OpciAdi)=>{Show_ventana(OpciAdi);},
                    (error)=>{ alert(errorMessage(error.status));});  
         
@@ -247,7 +247,7 @@
     }
     function Itemsget()
     {
-          $.ajax({type: "GET", url:"api/ItemsCarrito",contentType: "application/json"})
+          $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); 
         
@@ -268,7 +268,7 @@
             total: precio    
         };
         
-    $.ajax({type: "POST", url:"api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+    $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); 
         
@@ -362,10 +362,10 @@
     cuerpoventana.html("");
     cuerpoventana.html("<h3>"+plato.nombre+"  $"+ plato.precio+"</h3><p>"+plato.descripcion+"</p>");
      OpciAdi.forEach( (o)=>{row_opciones(cuerpoventana,o);});
-     cuerpoventana.append("<input type='button' value='-' id='menos'>");
+     cuerpoventana.append("<input class='input_orange' type='button' value='-' id='menos'>");
      cuerpoventana.append("<input type='text' value='1' id='cantidad'>");
-      cuerpoventana.append("<input type='button' value='+' id='mas'>");
-    cuerpoventana.append("<input type='button' value='Enviar' id='Enviar'>");
+      cuerpoventana.append("<input class='input_orange' type='button' value='+' id='mas'>");
+    cuerpoventana.append("<input class='input_orange' type='button' value='Enviar' id='Enviar'>");
       cuerpoventana.find("#mas").on("click",()=>{Suma();});
        cuerpoventana.find("#menos").on("click",()=>{Resta();});
        cuerpoventana.find("#Enviar").on("click",()=>{Micarrito();});
@@ -502,7 +502,7 @@
             total: precio    
         };
         
-    $.ajax({type: "POST", url:"api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+    $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); }
          
@@ -530,7 +530,7 @@
                  var div_modulo =  $("<div />");
                 div_modulo.addClass("Orden");
                 div_modulo.on("click",()=>{PlatoEdit(i);});
-                div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
+                div_contenedor.append("<div class='Orden'><br><input class='input_orange' id='menos_cantidad' type='button' value='-'></div>");
                div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
               total = total + parseInt(i.total);
             i.opciones.forEach( (o)=>{    
@@ -556,7 +556,7 @@
        }
     function PlatoEdit(item)
     {
-           $.ajax({type: "GET", url:"api/Opciones/"+item.plato.codigo, contentType: "application/json"})
+           $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Opciones/"+item.plato.codigo, contentType: "application/json"})
             .then( (OpciAdi)=>{Show_ventana_updateplato(OpciAdi,item);},
                    (error)=>{ alert(errorMessage(error.status));});   
         
@@ -570,10 +570,10 @@
     cuerpoventana.html("");
     cuerpoventana.html("<h3>"+plato.nombre+"  $"+ plato.precio+"</h3><p>"+plato.descripcion+"</p>");
      OpciAdi.forEach( (o)=>{row_opciones_update(cuerpoventana,o,item);});
-     cuerpoventana.append("<input type='button' value='-' id='menos'>");
+     cuerpoventana.append("<input class='input_orange' type='button' value='-' id='menos'>");
      cuerpoventana.append("<input type='text' value='"+item.cantidad+"' id='cantidad'>");
-      cuerpoventana.append("<input type='button' value='+' id='mas'>");
-    cuerpoventana.append("<input type='button' value='Actualizar' id='Enviar'>");
+      cuerpoventana.append("<input class='input_orange' type='button' value='+' id='mas'>");
+    cuerpoventana.append("<input class='input_orange' type='button' value='Actualizar' id='Enviar'>");
       cuerpoventana.find("#mas").on("click",()=>{Suma();});
        cuerpoventana.find("#menos").on("click",()=>{Resta();});
        cuerpoventana.find("#Enviar").on("click",()=>{AddPlatoUpdate(item);});
@@ -588,7 +588,7 @@
       var item_codigo=item_carrito.plato.codigo.toString();
       item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
        item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
-      $.ajax({type: "DELETE", url:"api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
+      $.ajax({type: "DELETE", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
       .then( ()=>{UpdatePlato();},
              (error)=>{ alert(errorMessage(error.status));}); 
         
@@ -638,7 +638,7 @@
             total: precio    
         };
         
-    $.ajax({type: "PUT", url:"api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
+    $.ajax({type: "PUT", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito",data: JSON.stringify(Item_carrito),contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); }
          
@@ -659,7 +659,7 @@
       var item_codigo=item_carrito.plato.codigo.toString();
       item_carrito.adicionales.forEach((a)=>{item_codigo=item_codigo+a.codigo.toString();  });
        item_carrito.opciones.forEach((o)=>{item_codigo=item_codigo+o.codigo.toString();  });
-      $.ajax({type: "GET", url:"api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
+      $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/ItemsCarrito/"+item_codigo,contentType: "application/json"})
       .then( (items)=>{Show_items(items);},
              (error)=>{ alert(errorMessage(error.status));}); 
         
@@ -667,7 +667,7 @@
     function addlink()
     {
         var link = "/SISTEMA_WEB_RESTAURANTE/Presentacion/Perfil/perfil.html";
-         $.ajax({type: "POST", url:"api/Url",data: JSON.stringify(link),contentType: "application/json"})
+         $.ajax({type: "POST", url:"/SISTEMA_WEB_RESTAURANTE/api/Url",data: JSON.stringify(link),contentType: "application/json"})
       .then( ()=>{OpenLogin();},
              (error)=>{ alert(errorMessage(error.status));}); 
     }
@@ -681,13 +681,13 @@
         document.getElementById("c1").removeAttribute("disabled");
     }
     function buscarcategorias(){
-    $.ajax({type: "GET", url:"api/Categorias",contentType: "application/json"})
+    $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Categorias",contentType: "application/json"})
       .then( (categorias)=>{list(categorias);},
              (error)=>{ alert(errorMessage(error.status));});                  
     }
     
      function Buscarplatillos(codigo,descripcion){      
-        $.ajax({type: "GET", url:"api/Platillos/"+codigo, contentType: "application/json"})
+        $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Platillos/"+codigo, contentType: "application/json"})
             .then( (Platillos)=>{list_platillos(Platillos,descripcion);},
                    (error)=>{ alert(errorMessage(error.status));});                     
   }
@@ -708,7 +708,7 @@
       d.addClass("Contenedor_plato");
       d.html("<div class='plato'><h3>"+plato.nombre+"</h3><p>"+plato.descripcion+"</p></div>"+
               "<div class='precio_añadir'><h3>$"+plato.precio.toString()+"</h3></div>"+
-               "<div class='precio_añadir'><br><input id='suma' type='button' value='+'></div>");
+               "<div class='precio_añadir'><br><input class='input_orange' id='suma' type='button' value='+'></div>");
      d.find("#suma").on("click",()=>{show_opciones(plato);});
       listadoplatillos.append(d);           
   }

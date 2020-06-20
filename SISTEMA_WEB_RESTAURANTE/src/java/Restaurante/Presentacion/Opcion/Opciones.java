@@ -19,6 +19,8 @@ import Restaurante.Logic.Opcion;
 import Restaurante.Logic.Opcion_Adicional;
 
 import java.util.List;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 
 /**
  *
@@ -34,6 +36,28 @@ public class Opciones {
         try {
            List<Opcion> opciones=Model.instance().OpcionSearch(codigo);
             return Model.instance().OpcionAdicionalGet(opciones);
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
+      @GET
+    @Produces({MediaType.APPLICATION_JSON})  
+    public List<Opcion> getopciones( ) {
+        try {
+          
+            return Model.instance().Opcionsearchall();
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
+       @POST
+    @Produces({MediaType.APPLICATION_JSON})  
+    @Consumes(MediaType.APPLICATION_JSON)  
+    public void addOpcion(Opcion o) {
+        
+        try {
+        Model.instance().InsertOpcion(o);
+
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }

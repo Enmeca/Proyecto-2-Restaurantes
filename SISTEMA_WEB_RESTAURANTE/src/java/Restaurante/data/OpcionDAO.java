@@ -32,7 +32,30 @@ public class OpcionDAO {
         } catch (SQLException ex) { }
         return opciones;
     }
-    
+    public List<Opcion> OpcionsearchAll (RelDatabase db){
+      
+  
+             List<Opcion> opciones = new ArrayList<>();
+        try {
+            String sql="select * from Opcion";
+        
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                opciones.add(opcion(rs));
+            }
+        } catch (SQLException ex) { }
+        return opciones;
+    }
+   public void Insert_opcion(RelDatabase db,Opcion o) throws Exception
+    {
+       String sql="insert into opcion (Nombre,Tipo,Requerida,Plato) values('%s','%s','%s','%s')";
+                
+        sql=String.format(sql,o.getNombre(),o.getTipo(),o.isRequerido() ? 1 : 0 ,o.getPlato().getCodigo());
+        int count=db.executeUpdate(sql);
+        if (count==0){
+            throw new Exception("Ya existe");
+        }
+    }
     
     public Opcion Opcionget (RelDatabase db,int codigo){
       

@@ -44,7 +44,7 @@ and open the template in the editor.
                  
                  
             <div id="items" class="items"><br><br> </div>
-          <input class="Margen_left" type="button" id="Compra" value="Confirmar">
+          <input class="Margen_left input_orange" type="button" id="Compra" value="Confirmar">
             </div>
                  </div>
         </div>
@@ -237,10 +237,10 @@ and open the template in the editor.
     cuerpoventana.html("");
     cuerpoventana.html("<h3>"+item.plato.nombre+"  $"+ item.plato.precio+"</h3><p>"+item.plato.descripcion+"</p>");
      OpciAdi.forEach( (o)=>{row_opciones_update(cuerpoventana,o,item);});
-     cuerpoventana.append("<input type='button' value='-' id='menos'>");
+     cuerpoventana.append("<input class='input_orange' type='button' value='-' id='menos'>");
      cuerpoventana.append("<input type='text' value='"+item.cantidad+"' id='cantidad'>");
-      cuerpoventana.append("<input type='button' value='+' id='mas'>");
-    cuerpoventana.append("<input type='button' value='Actualizar' id='Enviar'>");
+      cuerpoventana.append("<input class='input_orange' type='button' value='+' id='mas'>");
+    cuerpoventana.append("<input class='input_orange' type='button' value='Actualizar' id='Enviar'>");
       cuerpoventana.find("#mas").on("click",()=>{Suma();});
        cuerpoventana.find("#menos").on("click",()=>{Resta();});
        cuerpoventana.find("#Enviar").on("click",()=>{AddPlatoUpdate(item);});
@@ -413,15 +413,29 @@ and open the template in the editor.
         if(user)
         {  
             if(opcionespedido.tipo_pedido!="Pasan")
-            { Cliente={
-                    codigo: user.codigo,
+            {  if($("#Direccion").val()!="otra")
+               {
+                Cliente={
+                   codigo: user.codigo,
                     correo: user.correo,
                     nombre: user.nombre,
                     apellidos: user.apellidos,
                     telefono: user.telefono,
                     usuario: user.usuario,
-                    direccion: $("#Direccion").val()
-                }  }
+                    direccion: $("#Direccion").val()}
+                }
+                else
+                {
+                    Cliente={
+                   codigo: user.codigo,
+                    correo: user.correo,
+                    nombre: user.nombre,
+                    apellidos: user.apellidos,
+                    telefono: user.telefono,
+                    usuario: user.usuario,
+                    direccion: $("#txtdireccion").val()}
+                }
+            }
             else
             {Cliente={
                 codigo: user.codigo,
@@ -489,8 +503,11 @@ and open the template in the editor.
         select.attr('id', 'Direccion');
         $("#form").append("<p>Direcciones:</p>");
       direcciones.forEach((d)=>{ select.append("<option value='"+d.codigo+"'>"+d.direccion+"</option>");});
-          $("#form").append(select);      
-       
+        select.append("<option value='otra'>Otra direccion</option>");
+        select.on("click",()=>{$("#txtdireccion").val($("#Direccion option:selected").text());});
+        $("#form").append(select);
+     
+        $("#form").append("<input class='input_form' type='text' id='txtdireccion' placeholder='Otra direccion'>");
         
     }
     function Direccionesget(client){
@@ -518,7 +535,7 @@ and open the template in the editor.
                  var div_modulo =  $("<div />");
                 div_modulo.addClass("Orden");
                   div_modulo.on("click",()=>{PlatoEdit(i);});
-                div_contenedor.append("<div class='Orden'><br><input id='menos_cantidad' type='button' value='-'></div>");
+                div_contenedor.append("<div class='Orden'><br><input class='input_orange' id='menos_cantidad' type='button' value='-'></div>");
                div_modulo.append("<h3>"+i.cantidad+" X "+i.plato.nombre+"  "+i.total+"</h3>");
               total = total + parseInt(i.total);
             i.opciones.forEach( (o)=>{    

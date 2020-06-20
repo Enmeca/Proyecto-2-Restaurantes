@@ -5,13 +5,9 @@
  */
 package Restaurante.data;
 
-import Restaurante.Logic.Address_book;
-import Restaurante.Logic.Categoria;
-import Restaurante.Logic.Cliente;
-import Restaurante.Logic.Cliente_direccion;
+
 import Restaurante.Logic.Model;
-import Restaurante.Logic.OpcionesPedido;
-import Restaurante.Logic.Pedido;
+import Restaurante.Logic.Opcion;
 import Restaurante.Logic.Pedido_has_plato;
 import Restaurante.Logic.Pedido_has_plato_adicional;
 import Restaurante.Logic.Pedido_has_plato_opcion;
@@ -38,5 +34,26 @@ public class Pedido_has_plato_adicionalDAO {
        
     }
      
+      public List<Pedido_has_plato_adicional> PedidohasplatoadicionalSearch(RelDatabase db,int pedidoopcion,int pedidohasplato)
+     {
+       List<Pedido_has_plato_adicional> pedidoshasplatoadicional = new ArrayList<>();
+        try {
+            String sql="select * from pedido_has_plato_adicional where Pedido_opcion='%s' and Pedido_has_plato='%s'";
+            sql=String.format(sql,pedidoopcion,pedidohasplato);
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+             pedidoshasplatoadicional.add(pedidohasplatoadicional(rs));
+            }
+        } catch (SQLException ex) { }
+        return pedidoshasplatoadicional ;
+     }
+     public Pedido_has_plato_adicional pedidohasplatoadicional(ResultSet rs) throws SQLException 
+     {
+      Opcion op=new Opcion();
+      op.setCodigo(rs.getInt("Pedido_opcion"));
+      Pedido_has_plato pedido=new Pedido_has_plato();
+      pedido.setCodigo(rs.getInt("Pedido_has_plato"));
+      return new Pedido_has_plato_adicional(Model.instance().Adicionalget(rs.getInt("Adicional")),Model.instance().Pedidohasplatoopcionget(new Pedido_has_plato_opcion(op,pedido)));
+     }
 }
 

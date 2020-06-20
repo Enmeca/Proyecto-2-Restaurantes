@@ -31,6 +31,20 @@ public class PlatoDAO {
         } catch (SQLException ex) { }
         return platillos ;
     }
+      public List<Plato> Platosearchall (RelDatabase db){
+      
+  
+             List<Plato> platillos = new ArrayList<>();
+        try {
+            String sql="select plato.*,categoria.Descripcion from plato inner join categoria on plato.Categoria=categoria.Codigo";
+         
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                platillos.add(plato(rs));
+            }
+        } catch (SQLException ex) { }
+        return platillos ;
+    }
       public Plato Platoget (RelDatabase db,int codigo){
       
   
@@ -44,6 +58,16 @@ public class PlatoDAO {
             }
         } catch (SQLException ex) { }
         return null ;
+    }
+          public void Insert_plato(RelDatabase db,Plato p) throws Exception
+    {
+       String sql="insert into plato (Nombre,Descripcion,Precio,Categoria) values('%s','%s','%s','%s')";
+                
+        sql=String.format(sql,p.getNombre(),p.getDescripcion(),p.getPrecio(),p.getCategoria().getCodigo());
+        int count=db.executeUpdate(sql);
+        if (count==0){
+            throw new Exception("Ya existe");
+        }
     }
     public Plato plato(ResultSet rs) throws SQLException 
      {

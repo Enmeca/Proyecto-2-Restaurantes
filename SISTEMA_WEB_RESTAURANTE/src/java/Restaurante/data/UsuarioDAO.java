@@ -87,6 +87,7 @@ public class UsuarioDAO {
             throw new Exception("Usuario no existe");
         }
     }
+     
       public void Insert_Cliente(RelDatabase db,Cliente user) throws Exception
     {
          String sql="";
@@ -106,7 +107,20 @@ public class UsuarioDAO {
             throw new Exception("Ya existe");
         }
     }
-     
+     public List<Cliente> Clientesearch (RelDatabase db){
+      
+  
+             List<Cliente> clientes = new ArrayList<>();
+        try {
+            String sql="select * from cliente where usuario is not null";
+         
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                clientes.add(cliente1(rs));
+            }
+        } catch (SQLException ex) { }
+        return clientes ;
+    }
     
     public Cliente cliente(ResultSet rs) throws SQLException 
      {

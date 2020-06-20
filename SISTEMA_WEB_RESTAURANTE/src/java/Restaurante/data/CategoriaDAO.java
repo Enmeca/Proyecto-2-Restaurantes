@@ -30,6 +30,16 @@ public class CategoriaDAO {
         } catch (SQLException ex) { }
         return categorias ;
     }
+    public void Insert_categoria(RelDatabase db,Categoria c) throws Exception
+    {
+       String sql="insert into categoria (Descripcion) value('%s')";
+                
+        sql=String.format(sql,c.getDescripcion());
+        int count=db.executeUpdate(sql);
+        if (count==0){
+            throw new Exception("Ya existe");
+        }
+    }
     
     public Categoria categoria(ResultSet rs) throws SQLException 
      {

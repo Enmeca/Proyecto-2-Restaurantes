@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 
 /**
@@ -53,6 +54,16 @@ public class Pedido {
             throw new NotFoundException(); 
         }
     }
+     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void UpdatePedido(Restaurante.Logic.Pedido  p) {
+        try {
+          
+            Model.instance().UpdatePedido(p);
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
     @GET
     @Path("{codigo}")
     @Produces({MediaType.APPLICATION_JSON}) 
@@ -64,6 +75,16 @@ public class Pedido {
             throw new NotFoundException(); 
         }
     }
-
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON}) 
+    public List<Restaurante.Logic.Pedido> GetPedidosAll() {
+        try {
+           // Model.instance().personaDelete(cedula);
+          return Model.instance().Pedidosearch();
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
 
 }

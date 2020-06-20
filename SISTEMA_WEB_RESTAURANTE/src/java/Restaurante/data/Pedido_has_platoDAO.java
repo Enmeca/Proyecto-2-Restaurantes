@@ -47,6 +47,19 @@ public class Pedido_has_platoDAO {
         } catch (SQLException ex) { }
         return null ;
     }
+     public List<Pedido_has_plato> PedidohasplatoSearch(RelDatabase db,String codigo)
+     {
+       List<Pedido_has_plato> pedidoshasplato = new ArrayList<>();
+        try {
+            String sql="select * from pedido_has_plato where Pedido_Codigo='%s'";
+            sql=String.format(sql,codigo);
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+               pedidoshasplato.add(pedidohasplato(rs));
+            }
+        } catch (SQLException ex) { }
+        return pedidoshasplato ;
+     }
      public Pedido_has_plato Pedidohasplatogetbycodigo (RelDatabase db,int codigo){
       
         try {

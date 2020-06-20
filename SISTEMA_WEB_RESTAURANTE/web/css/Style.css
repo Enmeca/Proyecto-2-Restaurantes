@@ -11,6 +11,19 @@
     width: 200px;
     float:left;
 }
+#Menu_dashbord
+{
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#1e5799+0,207cca+37,207cca+43,2989d8+67,7db9e8+100 */
+background: rgb(30,87,153); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(30,87,153,1) 0%, rgba(32,124,202,1) 37%, rgba(32,124,202,1) 43%, rgba(41,137,216,1) 67%, rgba(125,185,232,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(30,87,153,1) 0%,rgba(32,124,202,1) 37%,rgba(32,124,202,1) 43%,rgba(41,137,216,1) 67%,rgba(125,185,232,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(30,87,153,1) 0%,rgba(32,124,202,1) 37%,rgba(32,124,202,1) 43%,rgba(41,137,216,1) 67%,rgba(125,185,232,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+
+    width: 1263px;
+    height: 52px;
+    
+}
 .Encabezado
 {
     background: rgb(252,234,187); /* Old browsers */
@@ -54,6 +67,16 @@ th, td {
 
     
 }
+.formulaio_azul 
+{
+    max-width: 500px;
+    margin: 2rem auto;
+    border: 5px solid lightblue;
+    padding: 2rem;
+    
+
+    
+}
 li>ul{
     
     display: none;
@@ -72,10 +95,14 @@ background: orange;
     max-width: 700px;
     margin: 2rem auto;
     border: 5px solid orangered;
-    padding: 2rem;
-    
-
-    
+    padding: 2rem;  
+}
+.formulario_table_azul 
+{
+    max-width: 700px;
+    margin: 2rem auto;
+    border: 5px solid lightblue;
+    padding: 2rem;  
 }
 .formulaio_veri 
 {
@@ -279,10 +306,15 @@ content: '\2B9D';
     
     background: orangered;
 }
-input[type='button']
+.input_orange
 {
     
     background: orange;
+}
+.input_blue
+{
+    
+    background: #2653d4;
 }
 .ventana{
     background: orange;

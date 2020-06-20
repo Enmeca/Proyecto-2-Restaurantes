@@ -5,6 +5,7 @@
  */
 package Restaurante.Logic;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class Model {
      private Restaurante.data.OpcionDAO opcion;
       private Restaurante.data.AdicionalDAO adicional;
       private Restaurante.data.UsuarioDAO usuario;
+      private Restaurante.data.AdminDAO admin;
       private Restaurante.data.PedidoDAO pedido;
       private Restaurante.data.AddressBookDAO direccion;
       private Restaurante.data.Pedido_has_platoDAO pedidohasplato;
@@ -40,6 +42,7 @@ public class Model {
 
     public Model() {
         db = new Restaurante.data.RelDatabase();
+        admin = new Restaurante.data.AdminDAO();
         categoria = new Restaurante.data.CategoriaDAO();
         plato = new Restaurante.data.PlatoDAO();
         opcion= new Restaurante.data.OpcionDAO();
@@ -68,6 +71,10 @@ public class Model {
     
     return categoria.Categoriasearch(db);
     }
+    public List<Pedido_has_plato> Pedidoshasplatosearch(String codigo)
+    {
+    return pedidohasplato.PedidohasplatoSearch(db, codigo);
+    }
     public void Insertclient(Cliente c) throws Exception
     {
     if(c.getUsuario()!=null)    
@@ -75,6 +82,15 @@ public class Model {
     
     usuario.Insert_Cliente(db, c);
    
+    }
+     public List<Pedido> Pedidosearch()
+    {
+    
+    return pedido.PedidoSearch(db);
+    }
+    public void UpdatePedido(Pedido p) throws Exception
+    {
+    pedido.PedidoUpdate(p, db);
     }
     public List<Plato> Platillosearch(String codigo)
     {
@@ -113,6 +129,19 @@ public class Model {
    {
        return adicional.Adicionalsearch(db, codigo);
    }
+   
+   public Pedido_has_plato_opcion Pedidohasplatoopcionget(Pedido_has_plato_opcion p)
+   {
+   return pedidohasplatoopcion.Pedidohasplatoopcionget(db, p);
+   }
+   public List<Pedido_has_plato_opcion> Pedidohasplatoopcionsearch(String codigo)
+   {
+   return pedidohasplatoopcion.PedidohasplatoopcionSearch(db, codigo);
+   }
+   public Adicional Adicionalget(int codigo)
+   {
+   return adicional.Adicionalget(db, codigo);
+   }
     public List<Opcion_Adicional> OpcionAdicionalGet(List<Opcion> opciones)
     {
     List<Opcion_Adicional> opcionadicionales = new ArrayList();
@@ -148,6 +177,10 @@ public class Model {
         }
     
     
+    }
+    public Administrador InicioSesionAdmin(Usuario user)
+    {
+    return admin.Inicio_sesion(db, user);
     }
     public void FormaPagoset(String formapago)
     {
@@ -228,9 +261,14 @@ public class Model {
     }
     else
     {
+         client=new Cliente(c.getCodigo(),c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),c.getUsuario());
+         if(!opcionespedido.getTipo_pedido().equals("Pasan") && !c.getDireccion().matches("[-+]?\\d*\\.?\\d+")){
+        this.InsertDireccion(client, c.getDireccion());
+        c.setDireccion(Integer.toString(direccion.Direccionget2(db, client).getCodigo()));
+        }
         pedido.InsertPedido(db, opcionespedido, c);
         
-        client=new Cliente(c.getCodigo(),c.getCorreo(),c.getNombre(),c.getApellidos(),c.getTelefono(),c.getUsuario());
+
         
         Pedido pedido_1=pedido.Pedidoget(db, client);
         for(Item_Carrito item:items.values())
@@ -251,6 +289,30 @@ public class Model {
     
     
     }
+    public List<Opcion> Opcionsearchall()
+    {
+      return opcion.OpcionsearchAll(db);
+    }
+    public List<Plato> Platosearchall()
+    {
+      return plato.Platosearchall(db);
+    }
+      public void InsertOpcion(Opcion o) throws Exception
+    {
+       opcion.Insert_opcion(db, o);
+    }
+        public void InsertAdicional(Adicional a) throws Exception
+    {
+       adicional.Insert_adicional(db, a);
+    }
+      public void InsertPlato(Plato p) throws Exception
+    {
+    plato.Insert_plato(db, p);
+    }
+    public void InsertCategoria(Categoria c) throws Exception
+    {
+    categoria.Insert_categoria(db, c);
+    }
     public void ClienteUpdate(Cliente c) throws Exception
     {
     usuario.UsuarioUpdate(c.getUsuario(), db);
@@ -264,7 +326,15 @@ public class Model {
     public String getPlatoedit() {
         return platoedit;
     }
-
+    public List<Cliente> clientesearch()
+    {
+    return usuario.Clientesearch(db);
+    }
+    public void InsertAdmin(Administrador a) throws Exception
+    {
+        admin.Insert_usuario(db, a.getUsuario());
+        admin.Insert_admin(db, a);
+    }
     public void setPlatoedit(String platoedit) {
         this.platoedit = platoedit;
     }
@@ -290,4 +360,26 @@ public class Model {
       
       }
     }
+    public List<Pedido_has_plato_adicional> Pedidohasplatoadicionalsearch(int Codigoopcion,int codigohasplato)
+    {
+    return pedidohasplatoadicional.PedidohasplatoadicionalSearch(db, Codigoopcion, codigohasplato);
+    }
+    public List<DetallePedido> Detallespedidoget(String codigo)
+    {
+     List<DetallePedido> detallespedido=new ArrayList();
+     List<Pedido_has_plato> pedidos_has_plato= this.Pedidoshasplatosearch(codigo);
+     for(Pedido_has_plato php:pedidos_has_plato)   
+     {
+     List<Pedido_has_plato_opcion> opcionespedido= this.Pedidohasplatoopcionsearch(Integer.toString(php.getCodigo()));
+     List<OpcionAdicionalPedido> opcionadicionalpedido = new ArrayList();
+        for(Pedido_has_plato_opcion phpo: opcionespedido)
+        {
+            List<Pedido_has_plato_adicional> adicionales = this.Pedidohasplatoadicionalsearch(phpo.getOpcion().getCodigo(),phpo.getPedido_has_plato().getCodigo());
+            opcionadicionalpedido.add(new OpcionAdicionalPedido(phpo,adicionales));
+        }
+        detallespedido.add(new DetallePedido(php,opcionadicionalpedido));
+     }
+    return detallespedido;
+    }
+   
 }

@@ -49,6 +49,17 @@ public class AddressBookDAO {
         } catch (SQLException ex) { }
         return null ;
     }
+    public Address_book Direccionget2 (RelDatabase db,Cliente c){
+        try {
+            String sql="select * from cliente inner join address_book on cliente.Email=address_book.cliente_Email where cliente_Codigo='%s' and cliente_Email='%s' order by address_book.Codigo desc limit 1";
+         sql=String.format(sql,c.getCodigo(),c.getCorreo());
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                return direccion(rs);
+            }
+        } catch (SQLException ex) { }
+        return null ;
+    }
      public Address_book Direcciongetbycodigo (RelDatabase db,int codigo){
       
   

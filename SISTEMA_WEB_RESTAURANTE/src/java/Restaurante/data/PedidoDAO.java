@@ -80,6 +80,28 @@ public class PedidoDAO {
         } catch (SQLException ex) { }
         return pedidos ;
      }
+     public void PedidoUpdate(Pedido p,RelDatabase db ) throws Exception{
+        String sql="update pedido set Estado='%s' "+ 
+                "where Codigo='%s'";
+        sql=String.format(sql,p.getEstado(),p.getCodigo());
+        
+        int count=db.executeUpdate(sql);
+        if (count==0){
+            throw new Exception("Pedido no existe");
+        }
+    }
+     public List<Pedido> PedidoSearch(RelDatabase db)
+     {
+       List<Pedido> pedidos = new ArrayList<>();
+        try {
+            String sql="select * from pedido";
+            ResultSet rs =  db.executeQuery(sql);
+            while (rs.next()) {
+                pedidos.add(pedido(rs));
+            }
+        } catch (SQLException ex) { }
+        return pedidos ;
+     }
      public Pedido Pedidogetbycodigo (RelDatabase db,int codigo){
       
         try {
