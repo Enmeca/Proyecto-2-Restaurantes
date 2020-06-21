@@ -21,7 +21,7 @@ public class CategoriaDAO {
   
              List<Categoria> categorias = new ArrayList<>();
         try {
-            String sql="select * from Categoria";
+            String sql="select * from categoria";
          
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {

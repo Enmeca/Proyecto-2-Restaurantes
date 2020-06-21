@@ -38,7 +38,7 @@ public class Pedido_has_plato_adicionalDAO {
      {
        List<Pedido_has_plato_adicional> pedidoshasplatoadicional = new ArrayList<>();
         try {
-            String sql="select * from pedido_has_plato_adicional where Pedido_opcion='%s' and Pedido_has_plato='%s'";
+            String sql="select * from Pedido_has_plato_adicional where Pedido_opcion='%s' and Pedido_has_plato='%s'";
             sql=String.format(sql,pedidoopcion,pedidohasplato);
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {

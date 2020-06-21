@@ -22,7 +22,7 @@ public class AdicionalDAO {
   
              List<Adicional> adicionales = new ArrayList<>();
         try {
-            String sql="select * from Adicional where Opcion='%s'";
+            String sql="select * from adicional where Opcion='%s'";
          sql=String.format(sql,codigo);
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {

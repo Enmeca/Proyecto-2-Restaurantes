@@ -31,7 +31,7 @@ public class Pedido_has_plato_opcionDAO {
     public void InsertPedidohasplato (RelDatabase db,Pedido_has_plato_opcion p){
       
       String sql="";
-      sql="insert into pedido_has_plato_opcion (Opcion_Codigo,pedido_has_plato_Codigo) values('%s','%s')";
+      sql="insert into Pedido_has_plato_opcion (Opcion_Codigo,pedido_has_plato_Codigo) values('%s','%s')";
       sql=String.format(sql,p.getOpcion().getCodigo(),p.getPedido_has_plato().getCodigo());
       int count=db.executeUpdate(sql);
        
@@ -39,7 +39,7 @@ public class Pedido_has_plato_opcionDAO {
       public Pedido_has_plato_opcion Pedidohasplatoopcionget (RelDatabase db,Pedido_has_plato_opcion p){
       
         try {
-            String sql="select * from pedido_has_plato_opcion where pedido_has_plato_Codigo='%s' and Opcion_Codigo='%s' order by pedido_has_plato_Codigo desc limit 1";
+            String sql="select * from Pedido_has_plato_opcion where pedido_has_plato_Codigo='%s' and Opcion_Codigo='%s' order by pedido_has_plato_Codigo desc limit 1";
          sql=String.format(sql,p.getPedido_has_plato().getCodigo(),p.getOpcion().getCodigo());
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {
@@ -52,7 +52,7 @@ public class Pedido_has_plato_opcionDAO {
      {
        List<Pedido_has_plato_opcion> pedidoshasplatoopcion = new ArrayList<>();
         try {
-            String sql="select * from pedido_has_plato_opcion where pedido_has_plato_Codigo='%s'";
+            String sql="select * from Pedido_has_plato_opcion where pedido_has_plato_Codigo='%s'";
             sql=String.format(sql,codigo);
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {

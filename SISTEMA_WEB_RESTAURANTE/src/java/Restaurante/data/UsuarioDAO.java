@@ -35,7 +35,7 @@ public class UsuarioDAO {
       
         try {
             
-            String sql="select * from Cliente where Email='%s' and Usuario is null order by Codigo desc limit 1";
+            String sql="select * from cliente where Email='%s' and Usuario is null order by Codigo desc limit 1";
            sql=String.format(sql,user.getCorreo());
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {
@@ -48,7 +48,7 @@ public class UsuarioDAO {
       
         try {
             
-            String sql="select * from Cliente where Codigo='%s'";
+            String sql="select * from cliente where Codigo='%s'";
            sql=String.format(sql,c);
             ResultSet rs =  db.executeQuery(sql);
             while (rs.next()) {
@@ -92,12 +92,12 @@ public class UsuarioDAO {
     {
          String sql="";
         if(user.getUsuario()!=null){
-         sql="insert into Cliente(Email,Nombre,Apellidos,Telefono,Usuario) values('%s','%s','%s','%s','%s')";
+         sql="insert into cliente(Email,Nombre,Apellidos,Telefono,Usuario) values('%s','%s','%s','%s','%s')";
           sql=String.format(sql,user.getCorreo(),user.getNombre(),user.getApellidos(),user.getTelefono(),user.getCorreo());
         }
       else
         {
-        sql="insert into Cliente(Email,Nombre,Apellidos,Telefono) values('%s','%s','%s','%s')";
+        sql="insert into cliente(Email,Nombre,Apellidos,Telefono) values('%s','%s','%s','%s')";
          sql=String.format(sql,user.getCorreo(),user.getNombre(),user.getApellidos(),user.getTelefono());
         }
                 

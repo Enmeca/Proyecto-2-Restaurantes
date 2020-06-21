@@ -48,7 +48,7 @@ public class OpcionDAO {
     }
    public void Insert_opcion(RelDatabase db,Opcion o) throws Exception
     {
-       String sql="insert into opcion (Nombre,Tipo,Requerida,Plato) values('%s','%s','%s','%s')";
+       String sql="insert into Opcion (Nombre,Tipo,Requerida,Plato) values('%s','%s','%s','%s')";
                 
         sql=String.format(sql,o.getNombre(),o.getTipo(),o.isRequerido() ? 1 : 0 ,o.getPlato().getCodigo());
         int count=db.executeUpdate(sql);
