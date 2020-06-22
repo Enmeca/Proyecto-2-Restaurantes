@@ -189,10 +189,14 @@ public class Model {
     public void restaplatillo(String item)
     {
        if(items.get(item).getCantidad()==1){
+       if(this.opcionespedido!=null)
+       {
+       this.opcionespedido.setTotal(this.opcionespedido.getTotal() - items.get(item).getTotal());
+       }
        items.remove(item);
        }else{
            if(this.opcionespedido!=null)
-           this.opcionespedido.setTotal(this.opcionespedido.getTotal()-(items.get(item).getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad())));
+           this.opcionespedido.setTotal(this.opcionespedido.getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad()));
             items.get(item).setTotal(items.get(item).getTotal()-(items.get(item).getTotal()/items.get(item).getCantidad()));
         items.get(item).setCantidad(items.get(item).getCantidad()-1);
          
@@ -343,6 +347,11 @@ public class Model {
     {
       if(KeyItem(i).equals(platoedit))
       {
+          if(opcionespedido!=null)
+          {
+          opcionespedido.setTotal(opcionespedido.getTotal()-items.get(platoedit).getTotal());
+          opcionespedido.setTotal(opcionespedido.getTotal()+i.getTotal());
+          }
          items.get(platoedit).setCantidad(i.getCantidad());
           items.get(platoedit).setTotal(i.getTotal());
       }
