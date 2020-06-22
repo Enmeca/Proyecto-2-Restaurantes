@@ -91,6 +91,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
 
             <a id="anadircategoria" class="collapse-item" href="#">Añadir</a>
+            <a id="vercat" class="collapse-item" href="#">ver</a>
            
           </div>
         </div>
@@ -104,6 +105,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
 
             <a id="Anadirplato" class="collapse-item" href="#">Añadir</a>
+            <a id="vermenu" class="collapse-item" href="#">ver</a>            
           </div>
         </div>
       </li>
@@ -172,6 +174,9 @@
       $("#verpedidos").on("click",()=>{PedidosGet();});
       $("#anadiradmin").on("click",()=>{ShowFormUsuario();});
       $("#verclientes").on("click",()=>{ClientesGet();});
+      $("#vermenu").on("click",()=>{loadmenus();});
+      $("#vercat").on("click",()=>{loadcat();});
+
   }
   function ShowFormCategoria(){
   $("#content").html(  "<form class='formulaio_azul'>"+
@@ -462,6 +467,128 @@
                 (error)=>{ alert(errorMessage(error.status));});
             } 
     }
+    
+    function showmenus(Platillos){
+      $("#content").html(
+
+        "<div class='container-fluid'> <h3 class='text-dark mb-4'>Menu</h3> <div class='card shadow'>"+
+"    <div class='card-header py-3'> <p class='text-primary m-0 font-weight-bold'>Menu del Restaurante</p>"+
+"        </div> <div class='card-body'>"+
+"            <div class='row'>"+
+"                <div class='col-md-6 text-nowrap'>"+
+"                </div>"+
+"                <div class='col-md-6'>"+
+"                </div>"+
+"            </div>"+
+"            <div class='table-responsive table mt-2' id='dataTable' role='grid' aria-describedby='dataTable_info'>"+
+"                <table class='table my-0' id='dataTable'>"+
+"                    <thead>"+
+"                        <tr>"+
+"                            "+
+"                            <th>ID</th>"+
+"                            <th>Nombre</th>"+
+"                            <th style='padding: 12px;width: 170px;'>Descripcion</th>"+
+"                            <th>Precio</th>"+
+"                            <th>Categoria</th>"+
+"                        </tr>"+
+"                    </thead>"+
+"                    <tbody id='listadomenu'></tbody>"+
+"                    <tfoot>"+
+"                        <tr>"+
+"                            "+
+"                            <td><strong>ID</strong></td>"+
+"                            <td><strong>Nombre</strong></td>"+
+"                            <td><strong>Descripcion</strong></td>"+
+"                            <td><strong>Precio</strong></td>"+
+"                            <td><strong>Categoria</strong></td>"+
+"                        </tr>"+
+"                    </tfoot>"+
+"                </table>"+
+"            </div>"+
+"        </div>"+
+"    </div>"+
+"</div>"
+
+      );
+      var listado=$("#listadomenu");
+    listado.html("");
+    Platillos.forEach( (m)=>{rowmenus(listado,m);});	
+    }
+    function loadmenus(){
+    $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Platillos/", contentType: "application/json"})
+    .then( (Platillos)=>{showmenus(Platillos);},
+           (error)=>{ alert(errorMessage(error.status));});    
+  } 
+  function rowmenus(listado,menu){
+	var tr =$("<tr />");
+  tr.html("<td>"+menu.codigo+"</td>"+
+                "<td>"+menu.nombre+"</td>"+
+                "<td>"+menu.descripcion+"</td>"+
+                "<td>"+menu.precio+"</td>"+
+                "<td>"+menu.categoria.descripcion+"</td>");
+         //tr.find("#edit").on("click",()=>{edit(menu.codigo);});
+        // tr.find("#delete").on("click",()=>{del(menu.cedula);});
+	listado.append(tr);           
+  }
+
+
+  
+function loadcat(){
+    $.ajax({type: "GET", url:"/SISTEMA_WEB_RESTAURANTE/api/Categorias/", contentType: "application/json"})
+    .then( (Categorias)=>{listcat(Categorias);},
+           (error)=>{ alert(errorMessage(error.status));});    
+  }
+
+  function listcat(cate){
+  $("#content").html(
+
+    "<div class='container-fluid'>"+
+        "    <h3 class='text-dark mb-4'>Categorias</h3>"+
+        "    <div class='card shadow'>"+
+        "        <div class='card-header py-3'>"+
+        "            <p class='text-primary m-0 font-weight-bold'>Categorias del menu</p>"+
+        "        </div>"+
+        "        <div class='card-body'>"+
+        "            <div class='row'>"+
+
+        "            </div>"+
+        "            <div class='table-responsive table mt-2' id='dataTable' role='grid' aria-describedby='dataTable_info'>"+
+        "                <table class='table my-0' id='dataTable'>"+
+        "                    <thead>"+
+        "                        <tr>"+
+        "                            <th>Codigo</th>"+
+        "                            <th class='text-center'>Nombre</th>"+
+        "                        </tr>"+
+        "                    </thead>"+
+        "                    <tbody id='listadocat'></tbody>"+
+        "                    <tfoot>"+
+        "                        <tr>"+
+        "                            <td><strong>Codigo</strong></td>"+
+        "                            <td class='text-center'><strong>Nombre</strong></td>"+
+        "                        </tr>"+
+        "                    </tfoot>"+
+        "                </table>"+
+        "            </div>"+
+        "        </div>"+
+        "    </div>"+
+        "</div>"
+
+  );
+    var listado=$("#listadocat");
+    listado.html("");
+    cate.forEach( (c)=>{rowcat(listado,c);});	
+  }
+  
+  function rowcat(listado,cat){
+	var tr =$("<tr />");
+  tr.html(
+                "<td>"+cat.codigo+"</td>"+
+                "<td>"+cat.descripcion+"</td>");
+         //tr.find("#edit").on("click",()=>{edit(cat.codigo);});
+        // tr.find("#delete").on("click",()=>{del(cat.cedula);});
+	listado.append(tr);           
+  }
+
   Load(); 
   </script>
   <script src="/SISTEMA_WEB_RESTAURANTE/Dashboard/vendor/jquery/jquery.min.js"></script>
