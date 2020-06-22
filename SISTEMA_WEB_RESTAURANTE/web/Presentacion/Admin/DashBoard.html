@@ -203,17 +203,19 @@
           codigo:0,
           nombre:$("#Nombre").val(),
           tipo: '0',
-          requerida: $("#Requerida").val(),
+          requerido: true,
           plato:{ codigo: $("#Plato").val()}
           
-      }}
+      }
+     
+      }
       else
       {
         Opcion={
           codigo:0,
           nombre:$("#Nombre").val(),
           tipo: '1',
-          requerida: $("#Requerida").val(),
+          requerido: false,
           plato:{ codigo: $("#Plato").val()}
           
       }  

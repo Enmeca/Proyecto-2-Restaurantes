@@ -54,10 +54,14 @@ public class Opcion {
     public boolean isRequerido() {
         return requerido;
     }
-
+    public boolean getRequerido() {
+        return requerido;
+    }
     public void setRequerido(boolean requerido) {
         this.requerido = requerido;
     }
+
+   
 
     public Plato getPlato() {
         return plato;
